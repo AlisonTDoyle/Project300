@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo "Install node modules"
+      - npm i
+      - echo "Install angular cli"
+      - npm install -g @angular/cli
+  build:
+    commands:
+      - echo "Build angular application"
+      - ng build
+      - echo "Sync with angular application"
+      - npx cap sync

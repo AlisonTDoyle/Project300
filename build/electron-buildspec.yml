@@ -7,11 +7,11 @@ phases:
     commands:
       - echo "Install node modules"
       - npm i
-  build:
-    commands:
       - echo "Install angular cli"
       - npm install -g @angular/cli
+  build:
+    commands:
       - echo "Build angular application"
       - ng build
-      - echo "Sync with angular application"
-      - npx cap sync
+      - echo "Packaging angular application for windows"
+      - electron-packager ./ TimetableApplication --platform=win32 --overwrite
