@@ -27,6 +27,7 @@
     "@capacitor/cli": "^6.1.2",
     "@capacitor/core": "^6.1.2",
     "@capacitor/ios": "^6.1.2",
+    "bootstrap": "^5.3.3",
     "electron": "^32.2.0",
     "electron-packager": "^17.1.2",
     "rxjs": "~7.8.0",

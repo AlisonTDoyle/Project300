@@ -26,3 +26,7 @@ ng build; npx electron .
 Package (production):
 electron-packager ./ TimetableApplication --platform=win32 --overwrite
 ```
+When Downloading new file:
+'''
+npm i
+npm i bootstrap@5.3.3
