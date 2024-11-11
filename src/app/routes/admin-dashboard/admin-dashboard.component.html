@@ -1,1 +1,53 @@
-<p>admin-dashboard works!</p>
+<div class="container m-0 p-0 bg-body-tertiary">
+    <div class="row">
+        <div class="col-4 p-3 bg-body-secondary">
+            <form class="container">
+                <h2 class="fs-3">Timeblock Properties</h2>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Module</label>
+                    <input class="form-control" type="text">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Day</label>
+                    <select class="form-select">
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Start Time</label>
+                    <input class="form-control" type="text">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">End Time</label>
+                    <input class="form-control" type="text">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Room Type</label>
+                    <select class="form-select">
+                        <option>Lecture Hall</option>
+                        <option>Tiered Classroom</option>
+                        <option>Flat Classroom</option>
+                        <option>Science Lab</option>
+                        <option>Computer Lab</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary my-2 w-100">Update Timeblock</button>
+            </form>
+        </div>
+        <div class="col-8">
+            <div class="container w-100">
+                <div>
+                    <button class="btn btn-primary">Add Timeblock</button>
+                    <Button class="btn btn-danger m-2">Delete Timeblock</Button>
+                </div>
+                <div>
+                    <full-calendar class="w-100" [options]="calendarOptions"></full-calendar>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
