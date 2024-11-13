@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FullCalendarModule} from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { Title } from '@angular/platform-browser';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -19,34 +20,7 @@ import { DatabaseHandlerService } from '../../services/database-handler/database
 
 export class AdminDashboardComponent implements OnInit {
   // Properties
-  protected schedule:any[] = [
-    {
-      title: "Proffesional Development",
-      start: "2024-11-11T09:00:35Z",
-      end: "2024-11-11T11:00:35Z"
-    },
-    {
-      title: "Rich App Development",
-      start: "2024-11-11T11:00:35Z",
-      end: "2024-11-11T14:00:35Z"
-    },
-    {
-      title: "Soft Project Management",
-      start: "2024-11-11T14:00:35Z",
-      end: "2024-11-11T16:00:35Z"
-    },
-    {
-      title: "Mobile App Development",
-      start: "2024-11-12T11:00:35Z",
-      end: "2024-11-12T12:00:35Z"
-    },
-    {
-      title: "Soft Project Management",
-      start: "2024-11-12T16:00:35Z",
-      end: "2024-11-12T18:00:35Z"
-    },
-  ];
-
+  protected schedule:any[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
@@ -63,10 +37,14 @@ export class AdminDashboardComponent implements OnInit {
     slotMinTime: "09:00:00",
     slotMaxTime: "21:00:00"
   };
+  protected timeblockForm:FormGroup;
+  protected schedulePromise:Promise<EventInput[]> = {};
 
   // Constructor
-  constructor(private _databaseHandler:DatabaseHandlerService) {
+  constructor(private _databaseHandler:DatabaseHandlerService, private _formBuilder:FormBuilder) {
+    this.timeblockForm = _formBuilder.group({
 
+    });
   }
 
   // Event listeners
@@ -75,10 +53,23 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // Methods
-  protected ShowMockTimeblocks() {
+  protected AddNewTimeblock():void {
+    let startTime:Date = new Date((new Date()).setHours(9,0,0,0));
+    let endTime:Date = new Date((new Date()).setHours(10,0,0,0));
+
+    let newTimeblock:ScheduleTimeBlock = {
+      title: "New Class",
+      start: startTime.toISOString(),
+      end: endTime.toISOString()
+    }
+
+    this.schedule.push(newTimeblock);
+    this.calendarOptions.events = this.schedule;
+
+    console.log(this.schedule)
   }
 
-  protected SaveScheduleAsFile() {
+  protected SaveScheduleAsFile():void {
     let scheduleAsString:string = JSON.stringify(this.schedule);
     
     this._databaseHandler.SaveTimetableAsFile(scheduleAsString);

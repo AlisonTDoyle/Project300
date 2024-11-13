@@ -1,5 +1,6 @@
 export interface ScheduleTimeBlock {
     // Properties
     title:string
-    date:string
+    start:string
+    end:string
 }
