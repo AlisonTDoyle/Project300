@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { Title } from '@angular/platform-browser';
+import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -64,6 +65,9 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   // Constructor
+  constructor(private _databaseHandler:DatabaseHandlerService) {
+
+  }
 
   // Event listeners
   ngOnInit() {
@@ -72,5 +76,11 @@ export class AdminDashboardComponent implements OnInit {
 
   // Methods
   protected ShowMockTimeblocks() {
+  }
+
+  protected SaveScheduleAsFile() {
+    let scheduleAsString:string = JSON.stringify(this.schedule);
+    
+    this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
   }
 }

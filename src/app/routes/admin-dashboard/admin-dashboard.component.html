@@ -40,9 +40,10 @@
         </div>
         <div class="col-12 col-md-6 col-lg-9">
             <div>
-                <button class="btn btn-primary">Add Timeblock</button>
-                <Button class="btn btn-danger m-2">Delete Timeblock</Button>
-                <Button class="btn btn-danger m-2" (click)="ShowMockTimeblocks()">Show dummy Timeblock items</Button>
+                <button class="btn btn-primary ms-0 me-2">Add Timeblock</button>
+                <button class="btn btn-danger m-2">Delete Timeblock</button>
+                <button class="btn btn-danger m-2" (click)="ShowMockTimeblocks()">Show dummy Timeblock items</button>
+                <button class="btn btn-primary ms-2 me-0 justify-content-end" (click)="SaveScheduleAsFile()">Publish Timetable</button>
             </div>
             <div>
                 <full-calendar class="h-100" style="max-height: 80vh;" [options]="calendarOptions"></full-calendar>
