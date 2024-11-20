@@ -21,56 +21,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 export class AdminDashboardComponent implements OnInit {
   // Properties
-  // protected schedule: any[] = [
-  //   {
-  //     title: "Rich App Development",
-  //     startTime: "11:00:00",
-  //     endTime: "14:00:00",
-  //     startRecur: "2024-11-11T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Project Management",
-  //     start: "2024-11-11T14:00:00.000Z",
-  //     end: "2024-11-11T16:00:00.000Z",
-  //     startRecur: "2024-11-11T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Mobile App Development",
-  //     start: "2024-11-12T11:00:00.000Z",
-  //     end: "2024-11-12T12:00:00.000Z",
-  //     startRecur: "2024-11-12T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Project Management",
-  //     start: "2024-11-12T16:00:00.000Z",
-  //     end: "2024-11-12T18:00:00.000Z",
-  //     startRecur: "2024-11-12T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Web Programming 2",
-  //     start: "2024-11-13T09:00:00.000Z",
-  //     end: "2024-11-13T11:00:00.000Z",
-  //     startRecur: "2024-11-13T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Rich App Development",
-  //     start: "2024-11-13T11:00:00.000Z",
-  //     end: "2024-11-13T12:00:00.000Z",
-  //     startRecur: "2024-11-13T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Web Programming 2",
-  //     start: "2024-11-13T12:00:00.000Z",
-  //     end: "2024-11-13T13:00:00.000Z",
-  //     startRecur: "2024-11-13T11:00:00.000Z"
-  //   },
-  //   {
-  //     title: "Professional Development",
-  //     start: "2024-11-13T14:00:00.000Z",
-  //     end: "2024-11-13T16:00:00.000Z",
-  //     startRecur: "2024-11-13T11:00:00.000Z"
-  //   }
-  // ];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
@@ -153,26 +103,24 @@ export class AdminDashboardComponent implements OnInit {
         startTime: this.eventForm.value.startTime,
         endTime: this.eventForm.value.endTime,
         startRecur: "2024-11-11T11:00:00.000Z",
-        daysOfWeek: [day]
+        daysOfWeek: [day],
+        extendedProps: {
+          room: this.eventForm.value.roomType
+        }
       });
     }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
-    // alert(`Title: ${clickInfo.event.title},Start: ${clickInfo.event.start} , End: ${clickInfo.event.end}`)
     this.selectedEvent = clickInfo.event;
 
-    console.log(this.selectedEvent)
+    // Convert day from number to string
 
     this.eventForm.patchValue({
       moduleName: this.selectedEvent.title,
-      day: '',
-      startTime: '',
-      endTime: '',
-      roomType: ''
+      day: "Monday",
+      startTime: this.selectedEvent.start?.toISOString(),
+      endTime: this.selectedEvent.end?.toISOString(),
     });
   }
 
