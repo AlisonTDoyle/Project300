@@ -89,7 +89,6 @@ export class AdminDashboardComponent implements OnInit {
     slotMinTime: "09:00:00",
     slotMaxTime: "21:00:00",
     eventColor: '#378006',
-    select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
 
