@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import { ChangeDetectorRef, Component, OnInit, signal, ViewChild } from '@angular/core';
+import { FullCalendarModule, FullCalendarComponent } from '@fullcalendar/angular';
 import { CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid'
-import dayGridPlugin from '@fullcalendar/daygrid';
 import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,49 +21,57 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 export class AdminDashboardComponent implements OnInit {
   // Properties
-  protected schedule: any[] = [
-    {
-      title: "Rich App Development",
-      start: "2024-11-11T11:00:00.000Z",
-      end: "2024-11-11T14:00:00.000Z"
-    },
-    {
-      title: "Project Management",
-      start: "2024-11-11T14:00:00.000Z",
-      end: "2024-11-11T16:00:00.000Z"
-    },
-    {
-      title: "Mobile App Development",
-      start: "2024-11-12T11:00:00.000Z",
-      end: "2024-11-12T12:00:00.000Z"
-    },
-    {
-      title: "Project Management",
-      start: "2024-11-12T16:00:00.000Z",
-      end: "2024-11-12T18:00:00.000Z"
-    },
-    {
-      title: "Web Programming 2",
-      start: "2024-11-13T09:00:00.000Z",
-      end: "2024-11-13T11:00:00.000Z"
-    },
-    {
-      title: "Rich App Development",
-      start: "2024-11-13T11:00:00.000Z",
-      end: "2024-11-13T12:00:00.000Z"
-    },
-    {
-      title: "Web Programming 2",
-      start: "2024-11-13T12:00:00.000Z",
-      end: "2024-11-13T13:00:00.000Z"
-    },
-    {
-      title: "Professional Development",
-      start: "2024-11-13T14:00:00.000Z",
-      end: "2024-11-13T16:00:00.000Z"
-    }
-  ];
-  protected calendarOptions = {
+  // protected schedule: any[] = [
+  //   {
+  //     title: "Rich App Development",
+  //     startTime: "11:00:00",
+  //     endTime: "14:00:00",
+  //     startRecur: "2024-11-11T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Project Management",
+  //     start: "2024-11-11T14:00:00.000Z",
+  //     end: "2024-11-11T16:00:00.000Z",
+  //     startRecur: "2024-11-11T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Mobile App Development",
+  //     start: "2024-11-12T11:00:00.000Z",
+  //     end: "2024-11-12T12:00:00.000Z",
+  //     startRecur: "2024-11-12T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Project Management",
+  //     start: "2024-11-12T16:00:00.000Z",
+  //     end: "2024-11-12T18:00:00.000Z",
+  //     startRecur: "2024-11-12T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Web Programming 2",
+  //     start: "2024-11-13T09:00:00.000Z",
+  //     end: "2024-11-13T11:00:00.000Z",
+  //     startRecur: "2024-11-13T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Rich App Development",
+  //     start: "2024-11-13T11:00:00.000Z",
+  //     end: "2024-11-13T12:00:00.000Z",
+  //     startRecur: "2024-11-13T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Web Programming 2",
+  //     start: "2024-11-13T12:00:00.000Z",
+  //     end: "2024-11-13T13:00:00.000Z",
+  //     startRecur: "2024-11-13T11:00:00.000Z"
+  //   },
+  //   {
+  //     title: "Professional Development",
+  //     start: "2024-11-13T14:00:00.000Z",
+  //     end: "2024-11-13T16:00:00.000Z",
+  //     startRecur: "2024-11-13T11:00:00.000Z"
+  //   }
+  // ];
+  protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
       interactionPlugin,
@@ -73,38 +80,41 @@ export class AdminDashboardComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'timeGridWeek' // user can switch between the two
+      right: 'timeGridWeek,timeGridDay' // user can switch between the two
     },
-    events: this.schedule,
     weekends: false,
     editable: true,
     selectable: true,
     allDaySlot: false,
     slotMinTime: "09:00:00",
     slotMaxTime: "21:00:00",
+    eventColor: '#378006',
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
 
   };
-  protected timeblockForm: FormGroup = new FormGroup({
+  protected eventForm: FormGroup = new FormGroup({
     moduleName: new FormControl(''),
     day: new FormControl(''),
     startTime: new FormControl(''),
     endTime: new FormControl(''),
     roomType: new FormControl('')
   });
-  protected selectedEvent:EventApi | null = null;
+  protected selectedEvent: EventApi | null = null;
   currentEvents = signal<EventApi[]>([]);
+
+  // Html elements
+  @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
   // Constructor
   constructor(private _databaseHandler: DatabaseHandlerService, private _formBuilder: FormBuilder, private _changeDetector: ChangeDetectorRef) {
-    this.timeblockForm = _formBuilder.group({
-      moduleName: [''],
-      day: [''],
-      startTime: [''],
-      endTime: [''],
-      roomType: [''],
+    this.eventForm = _formBuilder.group({
+      moduleName: (''),
+      day: (''),
+      startTime: (''),
+      endTime: (''),
+      roomType: (''),
     });
   }
 
@@ -113,27 +123,39 @@ export class AdminDashboardComponent implements OnInit {
     // this.calendarOptions.events = this.schedule;
   }
 
-  handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
-    const calendarApi = selectInfo.view.calendar;
+  onSubmit() {
+    // Make sure calendar is accessable
+    if (this.calendarComponent != null) {
+      let calendarApi = this.calendarComponent.getApi();
 
-    calendarApi.unselect(); // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      });
-
-      let newTimeblock: ScheduleTimeBlock = {
-        title: title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr
+      // Convert day to corresponding number
+      let day: number = 0;
+      switch (this.eventForm.value.day) {
+        case "Monday":
+          day = 1;
+          break;
+        case "Tuesday":
+          day = 2;
+          break;
+        case "Wednesday":
+          day = 3;
+          break;
+        case "Thursday":
+          day = 4;
+          break;
+        case "Friday":
+          day = 5;
+          break;
       }
 
-      this.schedule.push(newTimeblock);
+      // Add event to program
+      calendarApi.addEvent({
+        title: this.eventForm.value.moduleName,
+        startTime: this.eventForm.value.startTime,
+        endTime: this.eventForm.value.endTime,
+        startRecur: "2024-11-11T11:00:00.000Z",
+        daysOfWeek: [day]
+      });
     }
   }
 
@@ -144,7 +166,9 @@ export class AdminDashboardComponent implements OnInit {
     // alert(`Title: ${clickInfo.event.title},Start: ${clickInfo.event.start} , End: ${clickInfo.event.end}`)
     this.selectedEvent = clickInfo.event;
 
-    this.timeblockForm.setValue({
+    console.log(this.selectedEvent)
+
+    this.eventForm.patchValue({
       moduleName: this.selectedEvent.title,
       day: '',
       startTime: '',
@@ -169,15 +193,15 @@ export class AdminDashboardComponent implements OnInit {
       end: endTime.toISOString()
     }
 
-    this.schedule.push(newTimeblock);
-    this.calendarOptions.events = this.schedule;
+    // this.schedule.push(newTimeblock);
+    // this.calendarOptions.events = this.schedule;
 
-    console.log(this.schedule)
+    // console.log(this.schedule)
   }
 
   protected SaveScheduleAsFile(): void {
-    let scheduleAsString: string = JSON.stringify(this.schedule);
+    // let scheduleAsString: string = JSON.stringify(this.schedule);
 
-    this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
+    // this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
   }
 }
