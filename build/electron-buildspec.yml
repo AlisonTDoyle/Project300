@@ -9,6 +9,8 @@ phases:
       - npm i
       - echo "Install angular cli"
       - npm install -g @angular/cli
+      - echo "Install election-packager"
+      - npm install -g electron-packager
   build:
     commands:
       - echo "Build angular application"
