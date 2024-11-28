@@ -13,5 +13,5 @@ phases:
 artifacts:
   files:
       - '**/*'
-  base-directory: 'dist/timetable-application/browser/*'
+  base-directory: 'dist/timetable-application/browser*'
   discard-paths: yes
