@@ -2,11 +2,16 @@
 <html lang="en">
 
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Styling (Move to style file when ready) -->
+    <!--------------------------------------------->
     <style>
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #005B5E;
@@ -15,20 +20,16 @@
             padding: 0;
         }
 
-        header {
-            background-color: #004345;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        MainBitofPage {
+            padding: 5px;
         }
 
-        .line {
-            height: 3px;
-            width: 25px;
-            background-color: white;
-            margin: 3px 0;
-            transition: 0.4s;
+        text {
+            color: white;
+        }
+
+        header {
+            background-color: #004345;
         }
 
         .greeting {
@@ -38,32 +39,23 @@
         }
 
         .timetable-container {
-            padding: 10px;
-            overflow-x: auto;
+            padding: 40px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            color: white;
-        }
-
-        th,
-        td {
-            padding: 5px;
-            font-size: 0.9em;
         }
 
         th {
-            text-align: left;
+            text-align: center;
         }
 
-        .subject {
-            background-color: #004345;
-            border-radius: 10px;
+        screen-text {
+            text-align: center;
         }
 
-        /* Responsive design for smaller screens */
+        /* For when the screen size gets smaller */
+        /*****************************************/
         @media (max-width: 768px) {
             .greeting {
                 font-size: 1em;
@@ -72,21 +64,22 @@
 
             th,
             td {
-                padding: 8px;
+                padding: 4px;
                 font-size: 0.8em;
             }
 
-            /* Table becomes scrollable */
             .timetable-container {
                 padding: 10px 5px;
-                overflow-x: scroll;
+                overflow-x: auto;
             }
 
             table {
-                width: 600px; /* Set a smaller fixed width for scrolling */
+                font-size: 0.8em;
             }
         }
 
+        /* For when the screen size gets REALLY small */
+        /**********************************************/
         @media (max-width: 480px) {
             header {
                 flex-direction: column;
@@ -99,166 +92,104 @@
 
             th,
             td {
-                padding: 5px;
+                padding: 2px;
                 font-size: 0.7em;
             }
 
-            /* Reduce table size further for very small screens */
             table {
-                width: 550px;
+                width: 100%;
+                table-layout: fixed;
             }
         }
     </style>
+
     <title>ATU Student Timetable</title>
 </head>
 
+<!-- The Javascript -->
+<!-------------------->
+<script>
+        document.addEventListener("DOMContentLoaded", function() 
+        {
+            console.log("Entered Student ID: " + studentId);
+            document.querySelector("button").onclick = validateAndAlert;
+        });
+
+        function validateAndAlert() 
+        {
+            console.log("Add Validation Here");
+        }
+</script>
+
+<!-- Body -->
+<!----------> 
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#">ATU Student Timetable</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Dropdown
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+
+                <!-- Title -->
+                <!-----------> 
+                <a class="navbar-brand" href="#">ATU Student Timetable</a>
+
+                <!-- Hamburger Menu -->
+                <!-------------------->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Hamburger Menu -->
+                <!-------------------->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Demo</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Demo</a>
+                        </li>
                     </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                  </li>
-                </ul>
-                <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-              </div>
+
+                    <!-- Search Bar -->
+                    <!------------------->
+                    <div class="d-flex">
+                        <input id="studentIdInput" class="form-control me-2" type="text" placeholder="Demo" aria-label="Student ID">
+                        <button class="btn btn-outline-success" type="button">Enter</button>
+                    </div>
+                </div>
             </div>
-          </nav>
+        </nav>
     </header>
 
-    <div class="greeting">Hello Jake!</div>
+    <!-- Greeting the User -->
+    <!----------------------->
+    <div class="greeting" style="text-align: center;"> <h3>Hello Jake!</h3> </div>
+    
+    <br/><br/>
 
-    <div class="timetable-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Monday</th>
-                    <th>Tuesday</th>
-                    <th>Wednesday</th>
-                    <th>Thursday</th>
-                    <th>Friday</th>
-                </tr>
-            </thead>
+    <!-- Calling the Timetable -->
+    <!--------------------------->
+    <full-calendar class="h-100" style="max-height: 60vh;" [options]="calendarOptions" [events]="schedule"></full-calendar>
 
-            <tbody>
-                <!-- 9am -->
-                <tr>
-                    <td>9am</td>
-                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                    <td class="subject" rowspan="2">Personal Development<br>Room 103<br>John Weir<br></td>
-                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                </tr>
-
-                <!-- 10am -->
-                <tr>
-                    <td>10am</td>
-                    <td></td>
-                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
-                    <td></td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                    <td></td>
-                </tr>
-
-                <!-- 11am -->
-                <tr>
-                    <td>11am</td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                    <td></td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                    <td></td>
-                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                </tr>
-
-                <!-- 12pm -->
-                <tr>
-                    <td>12pm</td>
-                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                    <td></td>
-                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-
-                <!-- 1pm -->
-                <tr>
-                    <td>1pm</td>
-                    <td class="subject">Personal Development<br>Room 103<br>John Weir<br></td>
-                    <td></td>
-                    <td></td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                </tr>
-
-                <!-- 2pm -->
-                <tr>
-                    <td>2pm</td>
-                    <td></td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                    <td></td>
-                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
-                    <td></td>
-                </tr>
-
-                <!-- 3pm -->
-                <tr>
-                    <td>3pm</td>
-                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
-                    <td></td>
-                    <td></td>
-                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                    <td></td>
-                </tr>
-
-                <!-- 4pm -->
-                <tr>
-                    <td>4pm</td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                    <td></td>
-                    <td></td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                    <td></td>
-                </tr>
-
-                <!-- 5pm -->
-                <tr>
-                    <td>5pm</td>
-                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
-                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+    <!-- File Select -->
+    <!----------------->
+    <div style="text-align: right; margin: 20px;">
+        <label for="fileInput" class="btn btn-primary">Import Schedule</label>
+        <input id="fileInput" type="file" accept=".json" style="display: none;" (change)="importSchedule($event)">
     </div>
-</body>
 
+    <!-- Display the Upcoming Subject -->
+    <!---------------------------------->
+    <div style="text-align: center;">
+        <h4><u>{{ upcomingSubject }}</u></h4>
+    </div>
+
+    <footer class="py-3 my-4">
+        <p class="text-center text-light">© 2024 Atlantic Technological University</p>
+    </footer>
+      
+    <br/>
+
+</body>
 </html>
