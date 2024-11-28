@@ -21,6 +21,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 export class AdminDashboardComponent implements OnInit {
   // Properties
+  protected schedule: any[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
@@ -39,6 +40,7 @@ export class AdminDashboardComponent implements OnInit {
     slotMinTime: "09:00:00",
     slotMaxTime: "21:00:00",
     eventColor: '#378006',
+    events: this.schedule,
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this)
 
@@ -98,7 +100,7 @@ export class AdminDashboardComponent implements OnInit {
       }
 
       // Add event to program
-      calendarApi.addEvent({
+      let newEvent = {
         title: this.eventForm.value.moduleName,
         startTime: this.eventForm.value.startTime,
         endTime: this.eventForm.value.endTime,
@@ -107,7 +109,11 @@ export class AdminDashboardComponent implements OnInit {
         extendedProps: {
           room: this.eventForm.value.roomType
         }
-      });
+      }
+
+      calendarApi.addEvent(newEvent);
+
+      this.schedule.push(newEvent)
     }
   }
 
@@ -140,6 +146,8 @@ export class AdminDashboardComponent implements OnInit {
       end: endTime.toISOString()
     }
 
+
+
     // this.schedule.push(newTimeblock);
     // this.calendarOptions.events = this.schedule;
 
@@ -147,8 +155,8 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   protected SaveScheduleAsFile(): void {
-    // let scheduleAsString: string = JSON.stringify(this.schedule);
+    let scheduleAsString: string = JSON.stringify(this.schedule);
 
-    // this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
+    this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
   }
 }
