@@ -15,3 +15,8 @@ phases:
       - ng build
       - echo "Sync with angular application"
       - npx cap sync
+artifacts:
+  files:
+      - '**/*'
+  base-directory: 'android*'
+  discard-paths: yes
