@@ -9,9 +9,11 @@ phases:
       - npm i
       - echo "Install angular cli"
       - npm install -g @angular/cli
+      - echo "Install election-packager"
+      - npm install -g --save-dev electron-packager
   build:
     commands:
       - echo "Build angular application"
       - ng build
       - echo "Packaging angular application for windows"
-      - electron-packager ./ TimetableApplication --platform=win32 --overwrite
+      - electron-packager . MyAppName --platform=linux --arch=armv7l --electron-version=25.3.1 --overwrite
