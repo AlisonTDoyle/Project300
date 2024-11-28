@@ -1,0 +1,52 @@
+<div class="container-fluid">
+    <div class="row" style="height: 94vh;">
+        <div class="col-12 col-md-6 col-lg-3 p-3 bg-body-tertiary">
+            <form class="container" [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+                <h2 class="fs-3">Timeblock Properties</h2>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Module</label>
+                    <input class="form-control" type="text" formControlName="moduleName">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Day</label>
+                    <select class="form-select" formControlName="day">
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Start Time</label>
+                    <input class="form-control" type="text" formControlName="startTime">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">End Time</label>
+                    <input class="form-control" type="text" formControlName="endTime">
+                </div>
+                <div class="mb-2">
+                    <label for="" class="form-control-label">Room Type</label>
+                    <select class="form-select" formControlName="roomType">
+                        <option>Lecture Hall</option>
+                        <option>Tiered Classroom</option>
+                        <option>Flat Classroom</option>
+                        <option>Science Lab</option>
+                        <option>Computer Lab</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary my-2 w-100" type="submit">Update Timeblock</button>
+            </form>
+        </div>
+        <div class="col-12 col-md-6 col-lg-9">
+            <div>
+                <button class="btn btn-primary ms-0 me-2" (click)="AddNewTimeblock()">Add Timeblock</button>
+                <button class="btn btn-danger m-2">Delete Timeblock</button>
+                <button class="btn btn-primary ms-2 me-0 justify-content-end" (click)="SaveScheduleAsFile()">Publish Timetable</button>
+            </div>
+            <div>
+                <full-calendar #programPreview class="h-100" style="max-height: 80vh;" [options]="calendarOptions"></full-calendar>
+            </div>
+        </div>
+    </div>
+</div>

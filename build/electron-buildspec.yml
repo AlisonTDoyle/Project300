@@ -17,3 +17,8 @@ phases:
       - ng build
       - echo "Packaging angular application for windows"
       - electron-packager . MyAppName --platform=linux --arch=armv7l --electron-version=25.3.1 --overwrite
+artifacts:
+  files:
+      - '**/*'
+  base-directory: 'dist/TimetableApplication-linux-x64*'
+  discard-paths: yes

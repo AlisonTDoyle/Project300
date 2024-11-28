@@ -1,0 +1,214 @@
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #005B5E;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background-color: #004345;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .line {
+        height: 3px;
+        width: 25px;
+        background-color: white;
+        margin: 3px 0;
+        transition: 0.4s;
+    }
+
+    .greeting {
+        padding: 10px;
+        font-size: 1.2em;
+        color: rgb(226, 124, 0);
+    }
+
+    .timetable-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: white;
+    }
+
+    th,
+    td {
+        padding: 5px;
+        font-size: 0.9em;
+    }
+
+    th {
+        text-align: left;
+    }
+
+    .subject {
+        background-color: #004345;
+        border-radius: 10px;
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 768px) {
+        .greeting {
+            font-size: 1em;
+            padding: 10px 5px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            font-size: 0.8em;
+        }
+
+        /* Table becomes scrollable */
+        .timetable-container {
+            padding: 10px 5px;
+            overflow-x: scroll;
+        }
+
+        table {
+            width: 600px;
+            /* Set a smaller fixed width for scrolling */
+        }
+    }
+
+    @media (max-width: 480px) {
+        header {
+            flex-direction: column;
+            padding: 5px;
+        }
+
+        .greeting {
+            font-size: 0.9em;
+        }
+
+        th,
+        td {
+            padding: 5px;
+            font-size: 0.7em;
+        }
+
+        /* Reduce table size further for very small screens */
+        table {
+            width: 550px;
+        }
+    }
+</style>
+
+<body>
+    <div class="greeting">Hello Jake!</div>
+    
+    <div class="timetable-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <!-- 9am -->
+                <tr>
+                    <td>9am</td>
+                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                    <td class="subject" rowspan="2">Personal Development<br>Room 103<br>John Weir<br></td>
+                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                </tr>
+    
+                <!-- 10am -->
+                <tr>
+                    <td>10am</td>
+                    <td></td>
+                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
+                    <td></td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                    <td></td>
+                </tr>
+    
+                <!-- 11am -->
+                <tr>
+                    <td>11am</td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                    <td></td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                    <td></td>
+                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
+                </tr>
+    
+                <!-- 12pm -->
+                <tr>
+                    <td>12pm</td>
+                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
+                    <td></td>
+                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+    
+                <!-- 1pm -->
+                <tr>
+                    <td>1pm</td>
+                    <td class="subject">Personal Development<br>Room 103<br>John Weir<br></td>
+                    <td></td>
+                    <td></td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                </tr>
+    
+                <!-- 2pm -->
+                <tr>
+                    <td>2pm</td>
+                    <td></td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                    <td></td>
+                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
+                    <td></td>
+                </tr>
+    
+                <!-- 3pm -->
+                <tr>
+                    <td>3pm</td>
+                    <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
+                    <td></td>
+                    <td></td>
+                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
+                    <td></td>
+                </tr>
+    
+                <!-- 4pm -->
+                <tr>
+                    <td>4pm</td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                    <td></td>
+                    <td></td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                    <td></td>
+                </tr>
+    
+                <!-- 5pm -->
+                <tr>
+                    <td>5pm</td>
+                    <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
+                    <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
+                    <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
