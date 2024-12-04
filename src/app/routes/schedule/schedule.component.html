@@ -91,7 +91,7 @@
 </style>
 
 <body>
-    <div class="greeting">Hello Jake!</div>
+    <!-- <div class="greeting">Hello Jake!</div>
     
     <div class="timetable-container">
         <table>
@@ -106,9 +106,9 @@
                 </tr>
             </thead>
     
-            <tbody>
+            <tbody> -->
                 <!-- 9am -->
-                <tr>
+                <!-- <tr>
                     <td>9am</td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
@@ -116,79 +116,79 @@
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                 </tr>
-    
+     -->
                 <!-- 10am -->
-                <tr>
+                <!-- <tr>
                     <td>10am</td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 11am -->
-                <tr>
+                <!-- <tr>
                     <td>11am</td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                </tr>
+                </tr> -->
     
                 <!-- 12pm -->
-                <tr>
+                <!-- <tr>
                     <td>12pm</td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 1pm -->
-                <tr>
+                <!-- <tr>
                     <td>1pm</td>
                     <td class="subject">Personal Development<br>Room 103<br>John Weir<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                </tr>
+                </tr> -->
     
                 <!-- 2pm -->
-                <tr>
+                <!-- <tr>
                     <td>2pm</td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 3pm -->
-                <tr>
+                <!-- <tr>
                     <td>3pm</td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 4pm -->
-                <tr>
+                <!-- <tr>
                     <td>4pm</td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 5pm -->
-                <tr>
+                <!-- <tr>
                     <td>5pm</td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
@@ -198,7 +198,36 @@
             </tbody>
         </table>
     </div>
+     -->
+
+     
+    <!-- Greeting the User -->
+    <!----------------------->
+    <div class="greeting" style="text-align: center;"> <h3>Hello Jake!</h3> </div>
     
-    
-    
+    <br/><br/>
+
+    <!-- Calling the Timetable -->
+    <!--------------------------->
+    <full-calendar class="h-100" style="max-height: 60vh;" [options]="calendarOptions" [events]="schedule"></full-calendar>
+
+    <!-- File Select -->
+    <!----------------->
+    <div style="text-align: right; margin: 20px;">
+        <label for="fileInput" class="btn btn-primary">Import Schedule</label>
+        <input id="fileInput" type="file" accept=".json" style="display: none;" (change)="importSchedule($event)">
+    </div>
+
+    <!-- Display the Upcoming Subject -->
+    <!---------------------------------->
+    <div style="text-align: center;">
+        <h4><u>{{ upcomingSubject }}</u></h4>
+    </div>
+
+    <footer class="py-3 my-4">
+        <p class="text-center text-light">© 2024 Atlantic Technological University</p>
+    </footer>
+      
+    <br/>
+
 </body>
