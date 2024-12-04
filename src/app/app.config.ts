@@ -5,6 +5,6 @@ import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(), //full calender may have a soft dependancy on this. DO NOT REMOVE IT
   ]
 };
