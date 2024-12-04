@@ -32,11 +32,13 @@
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/rrule": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
     "bootstrap": "^5.3.3",
     "electron": "^32.2.0",
     "electron-packager": "^17.1.2",
     "file-saver": "^2.0.5",
+    "rrule": "^2.8.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

@@ -6,6 +6,9 @@ import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
+import rrulePlugin from '@fullcalendar/rrule'
+import { interval } from 'rxjs';
+import { RRule } from 'rrule';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -26,7 +29,8 @@ export class AdminDashboardComponent implements OnInit {
     initialView: 'timeGridWeek',
     plugins: [
       interactionPlugin,
-      timeGridPlugin
+      timeGridPlugin,
+      rrulePlugin
     ],
     headerToolbar: {
       left: 'prev,next',
@@ -120,13 +124,16 @@ export class AdminDashboardComponent implements OnInit {
   handleEventClick(clickInfo: EventClickArg) {
     this.selectedEvent = clickInfo.event;
 
+    let isRecurring = clickInfo.event.startEditable !== undefined;
+
     // Convert day from number to string
+    let day:string = this.ConvertNumberToDayString(this.selectedEvent.start?.getDay())
 
     this.eventForm.patchValue({
       moduleName: this.selectedEvent.title,
-      day: "Monday",
-      startTime: this.selectedEvent.start?.toISOString(),
-      endTime: this.selectedEvent.end?.toISOString(),
+      day: day,
+      startTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.start?.getTime()),
+      endTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.end?.getTime()),
     });
   }
 
@@ -136,35 +143,41 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   handleDateSelection(event: DateSelectArg) {
-    console.log(event)
-    if (this.calendarComponent != null) {
-      // Get calendar component
-      let calendarApi = this.calendarComponent.getApi();
+  console.log(event);
 
-      // Get info from dates selected
-      let startTime: string;
-      let endTime: string;
-      let day: number;
+  if (this.calendarComponent != null) {
+    // Get calendar component
+    let calendarApi = this.calendarComponent.getApi();
 
-      startTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.start.getTime());
-      endTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.end.getTime());
+    // Get info from dates selected
+    let startTime: string = this.ConvertMillisecondsSinceEpochToTimeStamp(event.start.getTime());
+    let endTime: string = this.ConvertMillisecondsSinceEpochToTimeStamp(event.end.getTime());
+    let day: number = event.start.getDay();
 
-      // Create event object
-      let newEvent = {
-        title: "New Event",
-        startTime: startTime,
-        endTime: endTime,
-        startRecur: "2024-11-11T11:00:00.000Z",
-        daysOfWeek: [1],
-        extendedProps: {
-          room: this.eventForm.value.roomType
-        }
+    // Create the rrule for recurrence
+    let rruleString = `
+      DTSTART:${event.start.toISOString()}
+      RRULE:FREQ=WEEKLY;BYDAY=${this.ConvertDayToRRuleDay(day)};
+    `;
+
+    // Create event object with rrule
+    let newEvent = {
+      title: "New Event",
+      rrule: {
+        freq: 'weekly', // Weekly recurrence
+        byweekday: [this.ConvertDayToRRuleDay(day)], // Convert day to RRULE format (e.g., "MO")
+        dtstart: event.start.toISOString(), // Start date and time
+      },
+      duration: this.calculateDuration(startTime, endTime), // Calculate event duration
+      extendedProps: {
+        room: this.eventForm.value.roomType,
       }
+    };
 
-      // Add event to calendar
-      calendarApi.addEvent(newEvent);
-      this.schedule.push(newEvent);
-    }
+    // Add event to calendar
+    calendarApi.addEvent(newEvent);
+    this.schedule.push(newEvent);
+  }
   }
 
   // Methods
@@ -174,18 +187,44 @@ export class AdminDashboardComponent implements OnInit {
     this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
   }
 
-  private ConvertMillisecondsSinceEpochToTimeStamp(duration:number): string {
+  private ConvertMillisecondsSinceEpochToTimeStamp(duration: number | undefined): string {
     // Method from: https://stackoverflow.com/a/19700358
+    if (duration != undefined) {
+      let milliseconds: number = Math.floor((duration % 1000) / 100);
+      let seconds: number = Math.floor((duration / 1000) % 60);
+      let minutes: number = Math.floor((duration / (1000 * 60)) % 60);
+      let hours: number = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-    let milliseconds:number = Math.floor((duration % 1000) / 100);
-    let seconds:number = Math.floor((duration / 1000) % 60);
-    let minutes:number = Math.floor((duration / (1000 * 60)) % 60);
-    let hours:number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+      let hoursAsString: string | number = (hours < 10) ? "0" + hours : hours;
+      let minutesAsString: string | number = (minutes < 10) ? "0" + minutes : minutes;
+      let secondsAsString: string | number = (seconds < 10) ? "0" + seconds : seconds;
 
-    let hoursAsString:string|number = (hours < 10) ? "0" + hours : hours;
-    let minutesAsString:string|number = (minutes < 10) ? "0" + minutes : minutes;
-    let secondsAsString:string|number = (seconds < 10) ? "0" + seconds : seconds;
+      return hoursAsString + ":" + minutesAsString + ":" + secondsAsString;
+    } else {
+      return "";
+    }
+  }
 
-    return hoursAsString + ":" + minutesAsString + ":" + secondsAsString + ":" + milliseconds;
+  private ConvertNumberToDayString(dayNo: number | undefined): string {
+    if (dayNo != undefined) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return days[dayNo];
+    } else {
+      return "Monday";
+    }
+  }
+
+  private calculateDuration(startTime: string, endTime: string): string {
+    let start = new Date(`1970-01-01T${startTime}Z`);
+    let end = new Date(`1970-01-01T${endTime}Z`);
+    let durationMilliseconds = end.getTime() - start.getTime();
+    let hours = Math.floor(durationMilliseconds / (1000 * 60 * 60));
+    let minutes = (durationMilliseconds / (1000 * 60)) % 60;
+    return `PT${hours}H${minutes}M`; // ISO 8601 duration format
+  }
+  
+  private ConvertDayToRRuleDay(day: number): string {
+    const rruleDays = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    return rruleDays[day];
   }
 }
