@@ -5,7 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -42,8 +42,8 @@ export class AdminDashboardComponent implements OnInit {
     eventColor: '#378006',
     events: this.schedule,
     eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
-
+    eventsSet: this.handleEvents.bind(this),
+    select: this.handleDateSelection.bind(this)
   };
   protected eventForm: FormGroup = new FormGroup({
     moduleName: new FormControl(''),
@@ -135,28 +135,57 @@ export class AdminDashboardComponent implements OnInit {
     this._changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
   }
 
-  // Methods
-  protected AddNewTimeblock(): void {
-    let startTime: Date = new Date((new Date()).setHours(9, 0, 0, 0));
-    let endTime: Date = new Date((new Date()).setHours(10, 0, 0, 0));
+  handleDateSelection(event: DateSelectArg) {
+    console.log(event)
+    if (this.calendarComponent != null) {
+      // Get calendar component
+      let calendarApi = this.calendarComponent.getApi();
 
-    let newTimeblock: ScheduleTimeBlock = {
-      title: "New Class",
-      start: startTime.toISOString(),
-      end: endTime.toISOString()
+      // Get info from dates selected
+      let startTime: string;
+      let endTime: string;
+      let day: number;
+
+      startTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.start.getTime());
+      endTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.end.getTime());
+
+      // Create event object
+      let newEvent = {
+        title: "New Event",
+        startTime: startTime,
+        endTime: endTime,
+        startRecur: "2024-11-11T11:00:00.000Z",
+        daysOfWeek: [1],
+        extendedProps: {
+          room: this.eventForm.value.roomType
+        }
+      }
+
+      // Add event to calendar
+      calendarApi.addEvent(newEvent);
+      this.schedule.push(newEvent);
     }
-
-
-
-    // this.schedule.push(newTimeblock);
-    // this.calendarOptions.events = this.schedule;
-
-    // console.log(this.schedule)
   }
 
+  // Methods
   protected SaveScheduleAsFile(): void {
     let scheduleAsString: string = JSON.stringify(this.schedule);
 
     this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
+  }
+
+  private ConvertMillisecondsSinceEpochToTimeStamp(duration:number): string {
+    // Method from: https://stackoverflow.com/a/19700358
+
+    let milliseconds:number = Math.floor((duration % 1000) / 100);
+    let seconds:number = Math.floor((duration / 1000) % 60);
+    let minutes:number = Math.floor((duration / (1000 * 60)) % 60);
+    let hours:number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+    let hoursAsString:string|number = (hours < 10) ? "0" + hours : hours;
+    let minutesAsString:string|number = (minutes < 10) ? "0" + minutes : minutes;
+    let secondsAsString:string|number = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hoursAsString + ":" + minutesAsString + ":" + secondsAsString + ":" + milliseconds;
   }
 }
