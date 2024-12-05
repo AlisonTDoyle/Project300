@@ -7,6 +7,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
+import * as bootstrap from "bootstrap"
 
 
 @Component({
@@ -38,8 +39,21 @@ export class ScheduleComponent{
     weekends: false,
     allDaySlot: false,
     slotMinTime: '09:00:00',
-    slotMaxTime: '18:00:00',
+    slotMaxTime: '21:00:00',
+    events: this.schedule,
+    eventDidMount: (info) => {
+      return new bootstrap.Popover(info.el, {
+        title: info.event.title,
+        placement: "auto",
+        trigger: "hover",
+        content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['room']})</p>`,
+        html: true
+      })
+    },
+    eventContent: this.renderEventContent.bind(this)
   };
+
+  
 
   protected timeblockForm: FormGroup;
 
@@ -126,6 +140,22 @@ export class ScheduleComponent{
     startDate.setHours(endHours, endMinutes);
 
     return startDate.toISOString();
+  }
+  
+  // ***********************************************************************************************
+  // Check the Upcoming Subject to display to the user!
+  renderEventContent(eventInfo: any) {
+    return {
+      html: `
+        <div>
+          <strong>${eventInfo.event.title}</strong>
+          <br>
+          <em>${eventInfo.event.extendedProps['room']}</em>
+          <br>
+          <small>${eventInfo.event.extendedProps['roomNumber']}</small>
+        </div>
+      `
+    };
   }
 
   // ***********************************************************************************************
