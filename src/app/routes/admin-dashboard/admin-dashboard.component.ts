@@ -43,7 +43,8 @@ export class AdminDashboardComponent implements OnInit {
     events: this.schedule,
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
-    select: this.handleDateSelection.bind(this)
+    select: this.handleDateSelection.bind(this),
+    eventContent: this.renderEventContent.bind(this)
   };
   protected eventForm: FormGroup = new FormGroup({
     moduleName: new FormControl(''),
@@ -107,7 +108,8 @@ export class AdminDashboardComponent implements OnInit {
         startRecur: "2024-11-11T11:00:00.000Z",
         daysOfWeek: [day],
         extendedProps: {
-          room: this.eventForm.value.roomType
+          room: this.eventForm.value.roomType,
+          roomNumber: this.GenerateRoomNumber()
         }
       }
 
@@ -121,12 +123,13 @@ export class AdminDashboardComponent implements OnInit {
     this.selectedEvent = clickInfo.event;
 
     // Convert day from number to string
+    let day: string = this.ConvertNumberToDayString(this.selectedEvent.start?.getDay())
 
     this.eventForm.patchValue({
       moduleName: this.selectedEvent.title,
-      day: "Monday",
-      startTime: this.selectedEvent.start?.toISOString(),
-      endTime: this.selectedEvent.end?.toISOString(),
+      day: day,
+      startTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.start?.getTime()),
+      endTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.end?.getTime()),
     });
   }
 
@@ -148,6 +151,7 @@ export class AdminDashboardComponent implements OnInit {
 
       startTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.start.getTime());
       endTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.end.getTime());
+      day = event.start.getDay();
 
       // Create event object
       let newEvent = {
@@ -155,7 +159,7 @@ export class AdminDashboardComponent implements OnInit {
         startTime: startTime,
         endTime: endTime,
         startRecur: "2024-11-11T11:00:00.000Z",
-        daysOfWeek: [1],
+        daysOfWeek: [day],
         extendedProps: {
           room: this.eventForm.value.roomType
         }
@@ -167,6 +171,20 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  renderEventContent(eventInfo: any) {
+    return {
+      html: `
+        <div>
+          <strong>${eventInfo.event.title}</strong>
+          <br>
+          <em>${eventInfo.event.extendedProps['room']}</em>
+          <br>
+          <small>${eventInfo.event.extendedProps['roomNumber']}</small>
+        </div>
+      `
+    };
+  }
+
   // Methods
   protected SaveScheduleAsFile(): void {
     let scheduleAsString: string = JSON.stringify(this.schedule);
@@ -174,18 +192,46 @@ export class AdminDashboardComponent implements OnInit {
     this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
   }
 
-  private ConvertMillisecondsSinceEpochToTimeStamp(duration:number): string {
+  private ConvertMillisecondsSinceEpochToTimeStamp(duration: number | undefined): string {
     // Method from: https://stackoverflow.com/a/19700358
+    if (duration != undefined) {
+      let seconds: number = Math.floor((duration / 1000) % 60);
+      let minutes: number = Math.floor((duration / (1000 * 60)) % 60);
+      let hours: number = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-    let milliseconds:number = Math.floor((duration % 1000) / 100);
-    let seconds:number = Math.floor((duration / 1000) % 60);
-    let minutes:number = Math.floor((duration / (1000 * 60)) % 60);
-    let hours:number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+      let hoursAsString: string | number = (hours < 10) ? "0" + hours : hours;
+      let minutesAsString: string | number = (minutes < 10) ? "0" + minutes : minutes;
+      let secondsAsString: string | number = (seconds < 10) ? "0" + seconds : seconds;
 
-    let hoursAsString:string|number = (hours < 10) ? "0" + hours : hours;
-    let minutesAsString:string|number = (minutes < 10) ? "0" + minutes : minutes;
-    let secondsAsString:string|number = (seconds < 10) ? "0" + seconds : seconds;
+      return hoursAsString + ":" + minutesAsString;
+    } else {
+      return "";
+    }
+  }
 
-    return hoursAsString + ":" + minutesAsString + ":" + secondsAsString + ":" + milliseconds;
+  private ConvertNumberToDayString(dayNo: number | undefined): string {
+    if (dayNo != undefined) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return days[dayNo];
+    } else {
+      return "Monday";
+    }
+  }
+
+  private GenerateRoomNumber(): string {
+    // Define the constraints
+    const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const firstNumbers: number[] = [0, 1, 2];
+  
+    // Generate random components
+    const letter: string = letters[Math.floor(Math.random() * letters.length)];
+    const firstNumber: number = firstNumbers[Math.floor(Math.random() * firstNumbers.length)];
+    const secondNumber: number = 0; // Fixed
+    const lastTwoDigits: string = Math.floor(Math.random() * 100) // Random number between 0-99
+      .toString()
+      .padStart(2, '0'); // Ensure two digits with leading zero if needed
+  
+    // Concatenate and return the room number
+    return `${letter}${firstNumber}${secondNumber}${lastTwoDigits}`;
   }
 }
