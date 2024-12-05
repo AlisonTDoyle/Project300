@@ -39,7 +39,7 @@ export class ScheduleComponent{
     weekends: false,
     allDaySlot: false,
     slotMinTime: '09:00:00',
-    slotMaxTime: '21:00:00',
+    slotMaxTime: '22:00:00',
     events: this.schedule,
     eventDidMount: (info) => {
       return new bootstrap.Popover(info.el, {

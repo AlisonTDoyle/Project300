@@ -38,8 +38,8 @@ export class AdminDashboardComponent implements OnInit {
     editable: false,
     selectable: true,
     allDaySlot: false,
-    slotMinTime: "09:00:00",
-    slotMaxTime: "21:00:00",
+    slotMinTime: "08:00:00",
+    slotMaxTime: "22:00:00",
     eventColor: '#378006',
     events: this.schedule,
     eventDidMount: (info) => {
