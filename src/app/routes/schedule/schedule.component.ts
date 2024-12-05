@@ -24,7 +24,7 @@ export class ScheduleComponent{
   protected upcomingSubject: string = '';
   protected calendarOptions: CalendarOptions = 
   {
-    themeSystem: 'bootstrap5',
+    // themeSystem: 'bootstrap5',
     eventColor: '#004345',
     initialView: 'timeGridWeek',
     plugins: [timeGridPlugin, dayGridPlugin,bootstrap5Plugin],
