@@ -53,7 +53,7 @@ export class AdminDashboardComponent implements OnInit {
     },
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
-    select: this.handleDateSelection.bind(this),
+    // select: this.handleDateSelection.bind(this),
     eventContent: this.renderEventContent.bind(this)
   };
   protected eventForm: FormGroup = new FormGroup({
