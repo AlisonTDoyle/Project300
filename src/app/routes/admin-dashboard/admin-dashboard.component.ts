@@ -35,7 +35,7 @@ export class AdminDashboardComponent implements OnInit {
       right: 'timeGridWeek,timeGridDay' // user can switch between the two
     },
     weekends: false,
-    editable: true,
+    editable: false,
     selectable: true,
     allDaySlot: false,
     slotMinTime: "09:00:00",
@@ -244,5 +244,9 @@ export class AdminDashboardComponent implements OnInit {
   
     // Concatenate and return the room number
     return `${letter}${firstNumber}${secondNumber}${lastTwoDigits}`;
+  }
+
+  private GenerateId() {
+
   }
 }
