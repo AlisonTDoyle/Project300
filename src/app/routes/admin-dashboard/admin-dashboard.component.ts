@@ -246,7 +246,16 @@ export class AdminDashboardComponent implements OnInit {
     return `${letter}${firstNumber}${secondNumber}${lastTwoDigits}`;
   }
 
-  private GenerateId() {
+  private GenerateId():string {
+    const length = 5; // Desired length of the hex ID
+    let hexId = '';
+    const hexChars = '0123456789abcdef';
 
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * hexChars.length);
+        hexId += hexChars[randomIndex];
+    }
+
+    return hexId;
   }
 }
