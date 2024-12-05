@@ -27,13 +27,13 @@ export class ScheduleComponent{
     themeSystem: 'bootstrap5',
     eventColor: '#004345',
     initialView: 'timeGridWeek',
-    plugins: [timeGridPlugin, dayGridPlugin, bootstrap5Plugin],
+    plugins: [timeGridPlugin, dayGridPlugin,bootstrap5Plugin],
 
     headerToolbar: 
     {
       left: 'prev,next',
       center: 'title',
-      right: 'timeGridWeek,dayGridWeek',
+      right: 'timeGridWeek,timeGridDay',
     },
 
     weekends: false,
