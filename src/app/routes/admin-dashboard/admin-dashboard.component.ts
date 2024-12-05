@@ -6,6 +6,7 @@ import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
+import * as bootstrap from "bootstrap";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -41,6 +42,15 @@ export class AdminDashboardComponent implements OnInit {
     slotMaxTime: "21:00:00",
     eventColor: '#378006',
     events: this.schedule,
+    eventDidMount: (info) => {
+      return new bootstrap.Popover(info.el, {
+        title: info.event.title,
+        placement: "auto",
+        trigger: "hover",
+        content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['room']})</p>`,
+        html: true
+      })
+    },
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     select: this.handleDateSelection.bind(this),
@@ -71,6 +81,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // Event listeners
+
   ngOnInit() {
     // this.calendarOptions.events = this.schedule;
   }
