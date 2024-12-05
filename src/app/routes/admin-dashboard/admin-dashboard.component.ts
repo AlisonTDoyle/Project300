@@ -5,7 +5,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import { ScheduleTimeBlock } from '../../interfaces/schedule-time-block';
 import { DatabaseHandlerService } from '../../services/database-handler/database-handler.service';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
+import * as bootstrap from "bootstrap";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -41,9 +42,19 @@ export class AdminDashboardComponent implements OnInit {
     slotMaxTime: "21:00:00",
     eventColor: '#378006',
     events: this.schedule,
+    eventDidMount: (info) => {
+      return new bootstrap.Popover(info.el, {
+        title: info.event.title,
+        placement: "auto",
+        trigger: "hover",
+        content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['room']})</p>`,
+        html: true
+      })
+    },
     eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
-
+    eventsSet: this.handleEvents.bind(this),
+    // select: this.handleDateSelection.bind(this),
+    eventContent: this.renderEventContent.bind(this)
   };
   protected eventForm: FormGroup = new FormGroup({
     moduleName: new FormControl(''),
@@ -70,6 +81,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // Event listeners
+
   ngOnInit() {
     // this.calendarOptions.events = this.schedule;
   }
@@ -107,7 +119,8 @@ export class AdminDashboardComponent implements OnInit {
         startRecur: "2024-11-11T11:00:00.000Z",
         daysOfWeek: [day],
         extendedProps: {
-          room: this.eventForm.value.roomType
+          room: this.eventForm.value.roomType,
+          roomNumber: this.GenerateRoomNumber()
         }
       }
 
@@ -121,12 +134,13 @@ export class AdminDashboardComponent implements OnInit {
     this.selectedEvent = clickInfo.event;
 
     // Convert day from number to string
+    let day: string = this.ConvertNumberToDayString(this.selectedEvent.start?.getDay())
 
     this.eventForm.patchValue({
       moduleName: this.selectedEvent.title,
-      day: "Monday",
-      startTime: this.selectedEvent.start?.toISOString(),
-      endTime: this.selectedEvent.end?.toISOString(),
+      day: day,
+      startTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.start?.getTime()),
+      endTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.selectedEvent.end?.getTime()),
     });
   }
 
@@ -135,28 +149,100 @@ export class AdminDashboardComponent implements OnInit {
     this._changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
   }
 
-  // Methods
-  protected AddNewTimeblock(): void {
-    let startTime: Date = new Date((new Date()).setHours(9, 0, 0, 0));
-    let endTime: Date = new Date((new Date()).setHours(10, 0, 0, 0));
+  handleDateSelection(event: DateSelectArg) {
+    console.log(event)
+    if (this.calendarComponent != null) {
+      // Get calendar component
+      let calendarApi = this.calendarComponent.getApi();
 
-    let newTimeblock: ScheduleTimeBlock = {
-      title: "New Class",
-      start: startTime.toISOString(),
-      end: endTime.toISOString()
+      // Get info from dates selected
+      let startTime: string;
+      let endTime: string;
+      let day: number;
+
+      startTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.start.getTime());
+      endTime = this.ConvertMillisecondsSinceEpochToTimeStamp(event.end.getTime());
+      day = event.start.getDay();
+
+      // Create event object
+      let newEvent = {
+        title: "New Event",
+        startTime: startTime,
+        endTime: endTime,
+        startRecur: "2024-11-11T11:00:00.000Z",
+        daysOfWeek: [day],
+        extendedProps: {
+          room: this.eventForm.value.roomType
+        }
+      }
+
+      // Add event to calendar
+      calendarApi.addEvent(newEvent);
+      this.schedule.push(newEvent);
     }
-
-
-
-    // this.schedule.push(newTimeblock);
-    // this.calendarOptions.events = this.schedule;
-
-    // console.log(this.schedule)
   }
 
+  renderEventContent(eventInfo: any) {
+    return {
+      html: `
+        <div>
+          <strong>${eventInfo.event.title}</strong>
+          <br>
+          <em>${eventInfo.event.extendedProps['room']}</em>
+          <br>
+          <small>${eventInfo.event.extendedProps['roomNumber']}</small>
+        </div>
+      `
+    };
+  }
+
+  // Methods
   protected SaveScheduleAsFile(): void {
     let scheduleAsString: string = JSON.stringify(this.schedule);
 
     this._databaseHandler.SaveTimetableAsFile(scheduleAsString);
+  }
+
+  private ConvertMillisecondsSinceEpochToTimeStamp(duration: number | undefined): string {
+    // Method from: https://stackoverflow.com/a/19700358
+    if (duration != undefined) {
+      let seconds: number = Math.floor((duration / 1000) % 60);
+      let minutes: number = Math.floor((duration / (1000 * 60)) % 60);
+      let hours: number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      let hoursAsString: string | number = (hours < 10) ? "0" + hours : hours;
+      let minutesAsString: string | number = (minutes < 10) ? "0" + minutes : minutes;
+      let secondsAsString: string | number = (seconds < 10) ? "0" + seconds : seconds;
+
+      return hoursAsString + ":" + minutesAsString;
+    } else {
+      return "";
+    }
+  }
+
+  private ConvertNumberToDayString(dayNo: number | undefined): string {
+    if (dayNo != undefined) {
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return days[dayNo];
+    } else {
+      return "Monday";
+    }
+  }
+
+  private GenerateRoomNumber(): string {
+    // Define the constraints
+    const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const firstNumbers: number[] = [0, 1, 2];
+  
+    // Generate random components
+    const letter: string = letters[Math.floor(Math.random() * letters.length)];
+    const firstNumber: number = firstNumbers[Math.floor(Math.random() * firstNumbers.length)];
+    const secondNumber: number = 0; // Fixed
+    const lastTwoDigits: string = Math.floor(Math.random() * 100) // Random number between 0-99
+      .toString()
+      .padStart(2, '0'); // Ensure two digits with leading zero if needed
+  
+    // Concatenate and return the room number
+    return `${letter}${firstNumber}${secondNumber}${lastTwoDigits}`;
   }
 }
