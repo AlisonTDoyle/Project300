@@ -1,110 +1,100 @@
-<style>
-    body {
-        font-family: 'Roboto', sans-serif;
-        background-color: #005B5E;
-        color: white;
-        margin: 0;
-        padding: 0;
-    }
+    <!-- Styling (Move to style file when ready) -->
+    <!--------------------------------------------->
+    <style>
 
-    header {
-        background-color: #004345;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .line {
-        height: 3px;
-        width: 25px;
-        background-color: white;
-        margin: 3px 0;
-        transition: 0.4s;
-    }
-
-    .greeting {
-        padding: 10px;
-        font-size: 1.2em;
-        color: rgb(226, 124, 0);
-    }
-
-    .timetable-container {
-        padding: 10px;
-        overflow-x: auto;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        color: white;
-    }
-
-    th,
-    td {
-        padding: 5px;
-        font-size: 0.9em;
-    }
-
-    th {
-        text-align: left;
-    }
-
-    .subject {
-        background-color: #004345;
-        border-radius: 10px;
-    }
-
-    /* Responsive design for smaller screens */
-    @media (max-width: 768px) {
-        .greeting {
-            font-size: 1em;
-            padding: 10px 5px;
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #005B5E;
+            color: white;
+            margin: 0;
+            padding: 0;
         }
 
-        th,
-        td {
-            padding: 8px;
-            font-size: 0.8em;
+        MainBitofPage {
+            padding: 5px;
         }
 
-        /* Table becomes scrollable */
-        .timetable-container {
-            padding: 10px 5px;
-            overflow-x: scroll;
+        text {
+            color: white;
         }
 
-        table {
-            width: 600px;
-            /* Set a smaller fixed width for scrolling */
-        }
-    }
-
-    @media (max-width: 480px) {
         header {
-            flex-direction: column;
-            padding: 5px;
+            background-color: #004345;
         }
 
         .greeting {
-            font-size: 0.9em;
+            padding: 10px;
+            font-size: 1.2em;
+            color: rgb(226, 124, 0);
         }
 
-        th,
-        td {
-            padding: 5px;
-            font-size: 0.7em;
+        .timetable-container {
+            padding: 40px;
         }
 
-        /* Reduce table size further for very small screens */
         table {
-            width: 550px;
+            width: 100%;
         }
-    }
-</style>
+
+        th {
+            text-align: center;
+        }
+
+        screen-text {
+            text-align: center;
+        }
+
+        /* For when the screen size gets smaller */
+        /*****************************************/
+        @media (max-width: 768px) {
+            .greeting {
+                font-size: 1em;
+                padding: 10px 5px;
+            }
+
+            th,
+            td {
+                padding: 4px;
+                font-size: 0.8em;
+            }
+
+            .timetable-container {
+                padding: 10px 5px;
+                overflow-x: auto;
+            }
+
+            table {
+                font-size: 0.8em;
+            }
+        }
+
+        /* For when the screen size gets REALLY small */
+        /**********************************************/
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                padding: 5px;
+            }
+
+            .greeting {
+                font-size: 0.9em;
+            }
+
+            th,
+            td {
+                padding: 2px;
+                font-size: 0.7em;
+            }
+
+            table {
+                width: 100%;
+                table-layout: fixed;
+            }
+        }
+    </style>
 
 <body>
-    <div class="greeting">Hello Jake!</div>
+    <!-- <div class="greeting">Hello Jake!</div>
     
     <div class="timetable-container">
         <table>
@@ -119,9 +109,9 @@
                 </tr>
             </thead>
     
-            <tbody>
+            <tbody> -->
                 <!-- 9am -->
-                <tr>
+                <!-- <tr>
                     <td>9am</td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
@@ -129,79 +119,79 @@
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                 </tr>
-    
+     -->
                 <!-- 10am -->
-                <tr>
+                <!-- <tr>
                     <td>10am</td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 11am -->
-                <tr>
+                <!-- <tr>
                     <td>11am</td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
-                </tr>
+                </tr> -->
     
                 <!-- 12pm -->
-                <tr>
+                <!-- <tr>
                     <td>12pm</td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 1pm -->
-                <tr>
+                <!-- <tr>
                     <td>1pm</td>
                     <td class="subject">Personal Development<br>Room 103<br>John Weir<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
-                </tr>
+                </tr> -->
     
                 <!-- 2pm -->
-                <tr>
+                <!-- <tr>
                     <td>2pm</td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 3pm -->
-                <tr>
+                <!-- <tr>
                     <td>3pm</td>
                     <td class="subject">Introduction to Programming 1<br>Room 104<br>Aine Mitchell<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 4pm -->
-                <tr>
+                <!-- <tr>
                     <td>4pm</td>
                     <td class="subject">Mathematics 1<br>Room 102<br>Fran O'Reagan<br></td>
                     <td></td>
                     <td></td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td></td>
-                </tr>
+                </tr> -->
     
                 <!-- 5pm -->
-                <tr>
+                <!-- <tr>
                     <td>5pm</td>
                     <td class="subject">Design Thinking<br>Room 105<br>Mary Loftus<br></td>
                     <td class="subject">Computer Systems<br>Room 101<br>Drew Lang<br></td>
@@ -211,4 +201,36 @@
             </tbody>
         </table>
     </div>
+     -->
+
+     
+    <!-- Greeting the User -->
+    <!----------------------->
+    <div class="greeting" style="text-align: center;"> <h3>Hello Jake!</h3> </div>
+    
+    <br/><br/>
+
+    <!-- Calling the Timetable -->
+    <!--------------------------->
+    <full-calendar class="h-100" style="max-height: 60vh;" [options]="calendarOptions" [events]="schedule"></full-calendar>
+
+    <!-- File Select -->
+    <!----------------->
+    <div style="text-align: right; margin: 20px;">
+        <label for="fileInput" class="btn btn-primary">Import Schedule</label>
+        <input id="fileInput" type="file" accept=".json" style="display: none;" (change)="importSchedule($event)">
+    </div>
+
+    <!-- Display the Upcoming Subject -->
+    <!---------------------------------->
+    <div style="text-align: center;">
+        <h4><u>{{ upcomingSubject }}</u></h4>
+    </div>
+
+    <footer class="py-3 my-4">
+        <p class="text-center text-light">© 2024 Atlantic Technological University</p>
+    </footer>
+      
+    <br/>
+
 </body>
