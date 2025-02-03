@@ -13,7 +13,8 @@ import { signIn } from '@aws-amplify/auth';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent 
+{
   constructor(private router: Router) {}
 
   async login(username:string, password:string) 

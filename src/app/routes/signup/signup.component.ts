@@ -3,6 +3,7 @@ import Auth from 'aws-amplify';
 import { Amplify } from 'aws-amplify';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { signUp } from '@aws-amplify/auth';
 
 @Component({
   selector: 'app-signup',
@@ -13,22 +14,23 @@ import { CommonModule } from '@angular/common';
 })
 export class SignupComponent 
 {
-  username: string = '';
-  email: string = '';
-  password: string = '';
-
-  async signup() 
+  async signup(username:string, password:string, email:string) 
   {
     try 
     {
-      await Auth.signUp
+      await signUp
       ({
-        username: this.username,
-        password: this.password,
-        attributes: { email: this.email },
+        username: username,
+        password: password,
+        options: 
+        {
+          userAttributes: { email: email },
+        }
       });
       console.log('Sign up successful');
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       console.error('Sign up error:', error);
     }
   }
