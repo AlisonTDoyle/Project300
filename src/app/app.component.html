@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<app-header></app-header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    
-    <title>ATU Student Timetable</title>
-</head>
+<div class="container">
+  <div class="login-form">
+    <h2>Login</h2>
+    <form (ngSubmit)="login()">
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" [(ngModel)]="username" name="username" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
 
-<body>
-    <app-header></app-header>
-    <router-outlet></router-outlet>
-</body>
-
-</html>
+<router-outlet></router-outlet>
