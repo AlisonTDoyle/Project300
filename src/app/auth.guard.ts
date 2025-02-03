@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Auth } from 'aws-amplify';
+import Auth from 'aws-amplify';
 import { Observable, from, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 

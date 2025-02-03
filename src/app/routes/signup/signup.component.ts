@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Auth } from 'aws-amplify';
+import Auth from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -10,14 +11,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
 })
-export class SignupComponent {
+export class SignupComponent 
+{
   username: string = '';
   email: string = '';
   password: string = '';
 
-  async signup() {
-    try {
-      await Auth.signUp({
+  async signup() 
+  {
+    try 
+    {
+      await Auth.signUp
+      ({
         username: this.username,
         password: this.password,
         attributes: { email: this.email },
