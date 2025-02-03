@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

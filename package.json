@@ -23,6 +23,7 @@
     "@angular/platform-browser": "^17.2.0",
     "@angular/platform-browser-dynamic": "^17.2.0",
     "@angular/router": "^17.2.0",
+    "@aws-amplify/auth": "^6.10.1",
     "@aws-amplify/ui-angular": "^5.0.36",
     "@capacitor/android": "^6.1.2",
     "@capacitor/cli": "^6.1.2",
