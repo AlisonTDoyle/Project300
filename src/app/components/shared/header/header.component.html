@@ -18,6 +18,19 @@
             <a class="nav-link" aria-current="page" routerLink="/admin" routerLinkActive="active" ariaCurrentWhenActive="page">Admin</a>
           </li>
         </ul>
+        <ng-template #noAuth>
+          <button class="btn btn-secondary" (click)="login()">Login</button>
+        </ng-template>
+        <div *ngIf="isAuthenticated; else noAuth">
+          <span class="navbar-text">
+            Is Authenticated: {{ isAuthenticated }}
+          </span>
+          <span class="navbar-text">
+            userData:
+            <pre>{{ userData$ | async | json }}</pre>
+          </span>
+          <button class="btn btn-secondary" (click)="logout()">Logout</button>
+        </div>
       </div>
     </div>
   </div>

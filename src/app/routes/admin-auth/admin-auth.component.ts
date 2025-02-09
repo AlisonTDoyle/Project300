@@ -1,18 +1,17 @@
-import { Component } from '@angular/core';
-import { RouterOutlet,RouterLink,RouterLinkActive } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  selector: 'app-admin-auth',
+  templateUrl: './admin-auth.component.html',
+  styleUrls: ['./admin-auth.component.scss'],
+  imports: [CommonModule],
+  standalone: true
 })
-export class HeaderComponent {
-  
+export class AdminAuthComponent implements OnInit {
+
   private readonly oidcSecurityService = inject(OidcSecurityService);
 
   configuration$ = this.oidcSecurityService.getConfiguration();
