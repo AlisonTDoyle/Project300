@@ -3,41 +3,55 @@ import { RouterOutlet,RouterLink,RouterLinkActive } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
-@Component({
+@Component
+({
   selector: 'app-header',
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
-  
+
+export class HeaderComponent 
+{  
   private readonly oidcSecurityService = inject(OidcSecurityService);
+  private readonly router = inject(Router);
 
   configuration$ = this.oidcSecurityService.getConfiguration();
-
   userData$ = this.oidcSecurityService.userData$;
-
   isAuthenticated = false;
 
-  ngOnInit(): void {
-    this.oidcSecurityService.isAuthenticated$.subscribe(
-      ({ isAuthenticated }) => {
-        this.isAuthenticated = isAuthenticated;
+  ngOnInit(): void 
+  {
+    this.oidcSecurityService.isAuthenticated$.subscribe
+    (
+      ({ isAuthenticated }) => 
+        {
+          this.isAuthenticated = isAuthenticated;
+
+        if (isAuthenticated) 
+        {
+          // Redirect to the admin dashboard after successful login
+          // HELP NEEDED!
+          this.router.navigate(['/admin']);
+        }
 
         console.warn('authenticated: ', isAuthenticated);
       }
     );
   }
 
-  login(): void {
+  login(): void 
+  {
     this.oidcSecurityService.authorize();
   }
 
-  logout(): void {
-    // Clear session storage
-    if (window.sessionStorage) {
+  logout(): void 
+  {
+    if (window.sessionStorage) 
+    {
       window.sessionStorage.clear();
     }
 
