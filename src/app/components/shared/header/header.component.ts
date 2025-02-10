@@ -31,14 +31,14 @@ export class HeaderComponent
         {
           this.isAuthenticated = isAuthenticated;
 
-        if (isAuthenticated) 
-        {
-          // Redirect to the admin dashboard after successful login
-          // HELP NEEDED!
-          this.router.navigate(['/admin']);
-        }
+          if (isAuthenticated) 
+          {
+            // Redirect to the admin dashboard after successful login
+            // HELP NEEDED!
+            this.router.navigate(['/admin']);
+          }
 
-        console.warn('authenticated: ', isAuthenticated);
+          console.warn('authenticated: ', isAuthenticated);
       }
     );
   }
