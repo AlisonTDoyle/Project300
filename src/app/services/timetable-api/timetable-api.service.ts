@@ -22,7 +22,7 @@ export class TimetableApiService {
   }
 
   // Read
-  public ReadSudentGroupTimetable(studentGroupId: string) {
+  public ReadSudentGroupTimetable(studentGroupId: string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StudentGroup&id=${studentGroupId}`;
 
     this._http.get(fetchUrl).subscribe((res) => {
@@ -30,7 +30,7 @@ export class TimetableApiService {
     });
   }
 
-  public ReadStaffTimetable(staffId:string) {
+  public ReadStaffTimetable(staffId:string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StaffId&id=${staffId}`;
 
     this._http.get(fetchUrl).subscribe((res) => {
