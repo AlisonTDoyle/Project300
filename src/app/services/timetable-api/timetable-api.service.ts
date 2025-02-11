@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { co } from '@fullcalendar/core/internal-common';
+import { catchError, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,7 @@ export class TimetableApiService {
     let fetchUrl:string = `${this._apiUrl}?filter=StudentGroup&id=${studentGroupId}`;
 
     this._http.get(fetchUrl).subscribe((res) => {
+      console.log(res);
       return res;
     });
   }
@@ -33,9 +36,14 @@ export class TimetableApiService {
   public ReadStaffTimetable(staffId:string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StaffId&id=${staffId}`;
 
-    this._http.get(fetchUrl).subscribe((res) => {
-      return res;
-    });
+    return this._http.get<any>(fetchUrl)
+    .pipe(
+      tap((data) => {
+        // Debug message
+        console.log('Data: ' + JSON.stringify(data))
+      }),
+      catchError(this.HandleError)
+    );
   }
 
   public ReadRoomTimetable(roomNo:string) {
@@ -49,4 +57,10 @@ export class TimetableApiService {
   // Update
 
   // Delete
+
+  // Misc.
+  private HandleError(err: HttpErrorResponse) {
+    console.error('Error: ' + err.message);
+    return err.message;
+  }
 }

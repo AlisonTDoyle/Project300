@@ -30,10 +30,6 @@ export class ApiTestEnvComponent {
 
   // Methods
   protected GetStudentTimetable() {
-    conso
-    this._timetableApiService.ReadSudentGroupTimetable(this.studentGroup.value).subscribe((res:any) => {
-      console.log(res);
-      this.studentTimetable = res;
-    });
+    this.studentTimetable = this._timetableApiService.ReadSudentGroupTimetable(this.studentGroup.value);
   }
 }
