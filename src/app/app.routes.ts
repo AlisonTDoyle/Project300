@@ -6,4 +6,5 @@ export const routes: Routes = [
     { path: '', component: ScheduleComponent },
     { path: 'schedule', redirectTo: '/'},
     { path: 'admin', component: AdminDashboardComponent },
+    
 ];
