@@ -34,4 +34,31 @@ export class ApiTestEnvComponent {
       this.studentTimetable = res;
     });
   }
+
+  protected async UpdateEvent() {
+    let eventId = "a5bbdc16b4efc0610974b912bd4b56fd4de790f4bdbbd5410e9319d8e203d37c";
+    let updatedTimetable = {
+      "StudentGroup": "Real Student Group",
+      "StaffId": "ABCD1234",
+      "RoomNo": "A0005",
+      "Staff": {
+          "FullName": "John Doe"
+      },
+      "Room": {
+          "Type": "Lecture Hall",
+          "Seats": 32
+      },
+      "StartTime": "9:00",
+      "EndTime": "11:00",
+      "ModuleCode": "COMP-7134",
+      "Module": {
+          "Name": "Introduction to Project Management"
+      },
+      "Day": "Sunday"
+  };
+
+    this._timetableApiService.UpdateEvent(updatedTimetable, eventId).subscribe((res:any) => {
+      console.log(res);
+    });
+  }
 }

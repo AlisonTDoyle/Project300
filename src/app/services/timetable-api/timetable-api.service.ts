@@ -43,6 +43,11 @@ export class TimetableApiService {
   }
 
   // Update
+  public UpdateEvent(event:any, eventId:string) {
+    let updateUrl:string = `${this._apiUrl}/${eventId}`;
+
+    return this._http.put(updateUrl, event).pipe();
+  }
 
   // Delete
 
