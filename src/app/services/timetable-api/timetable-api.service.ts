@@ -27,31 +27,19 @@ export class TimetableApiService {
   public ReadSudentGroupTimetable(studentGroupId: string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StudentGroup&id=${studentGroupId}`;
 
-    this._http.get(fetchUrl).subscribe((res) => {
-      console.log(res);
-      return res;
-    });
+    return this._http.get<any>(fetchUrl).pipe();
   }
 
   public ReadStaffTimetable(staffId:string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StaffId&id=${staffId}`;
 
-    return this._http.get<any>(fetchUrl)
-    .pipe(
-      tap((data) => {
-        // Debug message
-        console.log('Data: ' + JSON.stringify(data))
-      }),
-      catchError(this.HandleError)
-    );
+    return this._http.get<any>(fetchUrl).pipe();
   }
 
   public ReadRoomTimetable(roomNo:string) {
     let fetchUrl:string = `${this._apiUrl}?filter=RoomNo&id=${roomNo}`;
 
-    this._http.get(fetchUrl).subscribe((res) => {
-      return res;
-    });
+    return this._http.get<any>(fetchUrl).pipe();
   }
 
   // Update

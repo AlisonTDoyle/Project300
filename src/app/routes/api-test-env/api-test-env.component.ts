@@ -15,9 +15,9 @@ import { Form, FormControl, ReactiveFormsModule } from '@angular/forms';
 })
 export class ApiTestEnvComponent {
   // Properties
-  protected studentGroup:FormControl = new FormControl('');
-  protected staffId:FormControl = new FormControl('');
-  protected roomNo:FormControl = new FormControl('');
+  protected studentGroupSearch:FormControl = new FormControl('');
+  protected staffIdSearch:FormControl = new FormControl('');
+  protected roomNoSearch:FormControl = new FormControl('');
 
   protected studentTimetable:any = [];
   protected staffTimetable:any = [];
@@ -29,7 +29,9 @@ export class ApiTestEnvComponent {
   }
 
   // Methods
-  protected GetStudentTimetable() {
-    this.studentTimetable = this._timetableApiService.ReadSudentGroupTimetable(this.studentGroup.value);
+  protected async GetStudentTimetable() {
+    this._timetableApiService.ReadSudentGroupTimetable(this.studentGroupSearch.value).subscribe((res:any) => {
+      this.studentTimetable = res;
+    });
   }
 }

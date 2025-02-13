@@ -1,17 +1,11 @@
 <div class="container">
     <h1>POST</h1>
-    <form>
-        <div class="mb-2">
-            <label>Student Group (eg. SG_KSODV_HO8):</label>
-            <input class="form-control" style="width: 12rem;" [formControl]="studentGroup">
-        </div>
-    </form>
     <hr class="border-dark">
     <h1>GET</h1>
     <h2>Read StudentGroup</h2>
     <form action="">
         <label>Student Group (eg. SG_KSODV_HO8):</label>
-        <input class="form-control" style="width: 12rem;" [formControl]="studentGroup">
+        <input class="form-control" style="width: 12rem;" [formControl]="studentGroupSearch">
         <button class="btn btn-primary" type="button" (click)="GetStudentTimetable()">Send Request</button>
     </form>
     <ul>
