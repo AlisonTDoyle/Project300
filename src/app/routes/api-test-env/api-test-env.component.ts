@@ -29,13 +29,13 @@ export class ApiTestEnvComponent {
   }
 
   // Methods
-  protected async GetStudentTimetable() {
+  protected GetStudentTimetable() {
     this._timetableApiService.ReadSudentGroupTimetable(this.studentGroupSearch.value).subscribe((res:any) => {
       this.studentTimetable = res;
     });
   }
 
-  protected async UpdateEvent() {
+  protected UpdateEvent() {
     let eventId = "a5bbdc16b4efc0610974b912bd4b56fd4de790f4bdbbd5410e9319d8e203d37c";
     let updatedTimetable = {
       "StudentGroup": "Real Student Group",
@@ -60,5 +60,8 @@ export class ApiTestEnvComponent {
     this._timetableApiService.UpdateEvent(updatedTimetable, eventId).subscribe((res:any) => {
       console.log(res);
     });
+  }
+
+  protected DeleteEvent(evntId:string) {
   }
 }

@@ -23,6 +23,14 @@ export class TimetableApiService {
     });
   }
 
+  public BatchCreateEvents(events:any[]) {
+    let batchCreateUrl:string = `${this._apiUrl}/batch`;
+
+     this._http.post(batchCreateUrl, events).subscribe((res) => {
+       return res;
+     });
+  }
+
   // Read
   public ReadSudentGroupTimetable(studentGroupId: string):any {
     let fetchUrl:string = `${this._apiUrl}?filter=StudentGroup&id=${studentGroupId}`;
@@ -50,10 +58,9 @@ export class TimetableApiService {
   }
 
   // Delete
+  public DeleteEvent(eventId:string) {
+    let deleteUrl:string = `${this._apiUrl}/${eventId}`;
 
-  // Misc.
-  private HandleError(err: HttpErrorResponse) {
-    console.error('Error: ' + err.message);
-    return err.message;
+    return this._http.delete(deleteUrl).pipe();
   }
 }
