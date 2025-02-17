@@ -7,6 +7,7 @@ import { DatabaseHandlerService } from '../../services/database-handler/database
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
 import * as bootstrap from "bootstrap";
+import { AdminHeaderComponent } from '../../components/admin-dashboard/admin-header/admin-header.component';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,7 +15,8 @@ import * as bootstrap from "bootstrap";
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    AdminHeaderComponent
   ],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
