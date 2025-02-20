@@ -19,8 +19,10 @@ export const routes: Routes = [
         children: [
             {
                 path: 'room-manager',
+                title: 'Room Manager',
+                pathMatch: 'full',
                 component: RoomManagerComponent
             }
         ]
-    }
+    },
 ];
