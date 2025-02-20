@@ -9,6 +9,15 @@
                             aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <button class="btn btn-primary" id="basic-addon2"><span class="bi bi-search"></span></button>
                     </div>
+                    <div class="my-3">
+                        <select class="form-select">
+                            <option>Filter Rooms</option>
+                            <option>Lecture Hall</option>
+                            <option>Tiered Classroom</option>
+                            <option>Computer Lab</option>
+                            <option>Science Lab</option>
+                        </select>
+                    </div>
                     <div>
                         <div class="card p-1 mb-2" *ngFor="let room of rooms">
                             <p class="lead mb-0">{{room?.roomNumber}}</p>
@@ -28,7 +37,7 @@
             </div>
         </div>
         <div class="col-2">
-            <div class="card">
+            <div class="card h-100">
                 <div class="container">
                     <h2>Room Form</h2>
                     <form>
