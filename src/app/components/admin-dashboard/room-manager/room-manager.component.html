@@ -20,7 +20,7 @@
                     </div>
                     <hr>
                     <div>
-                        <div class="card mb-2" *ngFor="let room of rooms">
+                        <div class="card mb-2 room-card" *ngFor="let room of rooms" (click)="FetchRoomTimetable(room)">
                             <div class="card-body p-2">
                                 <p class="mb-0">{{room.RoomNo}}</p>
                                 <i class="text-secondary">{{room.Type}} ({{room.Seats}})</i>
