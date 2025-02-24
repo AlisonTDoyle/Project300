@@ -32,40 +32,13 @@
             </div>
         </div>
         <div class="col-8">
-            <div class="card">
+            <div class="card p-2">
                 <div class="container">
-                    <h2>Timetable</h2>
-                    <full-calendar #programPreview class="h-100" [options]="calendarOptions"></full-calendar>
+                    <full-calendar #programPreview  [options]="calendarOptions"></full-calendar>
                 </div>
             </div>
         </div>
         <div class="col-2">
-            <div class="card h-100">
-                <div class="container">
-                    <h2>Room Form</h2>
-                    <form>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Room Number</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Seats Available</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Room Type</label>
-                            <select class="form-select">
-                                <option>Select room type</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="" class="form-label">Facilities</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <button class="my-3 btn btn-primary">{{roomAction}} Room</button>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </div>

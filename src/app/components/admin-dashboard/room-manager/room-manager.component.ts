@@ -41,6 +41,7 @@ export class RoomManagerComponent implements OnInit {
     slotMinTime: "08:00:00",
     slotMaxTime: "22:00:00",
     eventColor: '#378006',
+    height: 'auto',
     events:  [],
     eventDidMount: (info) => {
       return new bootstrap.Popover(info.el, {
@@ -89,11 +90,11 @@ export class RoomManagerComponent implements OnInit {
 
         for (let i = 0; i < res.length; i++) {
           let newEvent = {
-            title: "Test",
+            title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name}`,
             startTime: res[i]?.StartTime,
             endTime: res[i]?.EndTime,
             startRecur: "2024-11-11T11:00:00.000Z",
-            daysOfWeek: [2],
+            daysOfWeek: res[i]?.Day,
             extendedProps: {
               roomNumber: res[i]?.RoomNo
             }

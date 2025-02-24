@@ -18,6 +18,11 @@ export const routes: Routes = [
         component: AdminDashboardComponent,
         children: [
             {
+                path: '',
+                redirectTo: 'room-manager',
+                pathMatch: 'full'
+            },
+            {
                 path: 'room-manager',
                 title: 'Room Manager',
                 pathMatch: 'full',
