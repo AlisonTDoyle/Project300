@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput } from '@fullcalendar/core';
 import interactionPlugin, { EventDragStopArg } from '@fullcalendar/interaction'
@@ -7,6 +7,8 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import { AdminDashboardComponent } from '../../../routes/admin-dashboard/admin-dashboard.component';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { DatabaseApiService } from '../../../services/database-api/database-api.service';
+import { Room } from '../../../interfaces/room';
 
 @Component({
   selector: 'app-room-manager',
@@ -18,7 +20,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   templateUrl: './room-manager.component.html',
   styleUrl: './room-manager.component.scss'
 })
-export class RoomManagerComponent {
+export class RoomManagerComponent implements OnInit {
   // Properties
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -68,27 +70,19 @@ export class RoomManagerComponent {
   };
 
   protected roomAction:string = "Create";
-
-  protected rooms:{ roomNumber: string, type:string }[] = [
-    {
-      roomNumber: "D1001",
-      type: "Tiered Classroom"
-    },
-    {
-      roomNumber: "D1025",
-      type: "Tiered Classroom"
-    },
-    {
-      roomNumber: "A0004",
-      type: "Lecture Hall"
-    },
-    {
-      roomNumber: "B1034",
-      type: "Computer Lab"
-    }
-  ]
+  protected rooms:Room[] = [];
+  private roomCursor:Object = {};
 
   // Constructor
+  constructor(private _databaseApi:DatabaseApiService) { }
+
+  // Event listeners
+  ngOnInit(): void {
+    this._databaseApi.ReadRoomsWithPagination(20, {}).subscribe((res) => {
+      this.rooms = res.rooms;
+      this.roomCursor = res.cursor;
+    });
+  }
 
   // Methods
 }
