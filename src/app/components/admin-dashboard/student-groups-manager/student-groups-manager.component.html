@@ -1,12 +1,36 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-6">
-            <div class="card py-2">
-                <app-event-management-form></app-event-management-form>
+    <div class="row my-4">
+        <!-- Details column -->
+        <div class="col-12 col-lg-6">
+            <div class="row h-100">
+                <div class="col-4">
+                    <div class="card p-2" style="height: auto">
+                        @if (studentGroups.length > 0) {
+                            <div class="card mb-2 room-card" *ngFor="let group of studentGroups">
+                                <div class="card-body p-2">
+                                    <p class="mb-0">{{group.StudentGroup}}</p>
+                                </div>
+                            </div>
+                        }
+                        @else {
+                            <div class="card-body p-2">
+                                <p class="mb-0">No student groups</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="card">
+                        <div class="p-2">
+                            <app-event-management-form></app-event-management-form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-6">
-            
+        <!-- Timetable column -->
+        <div class="col-12 col-lg-6">
+            <full-calendar [options]="calendarOptions"></full-calendar>
         </div>
     </div>
 </div>
