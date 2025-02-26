@@ -6,7 +6,7 @@
                 <div class="col-4">
                     <div class="card p-2" style="height: auto">
                         @if (studentGroups.length > 0) {
-                            <div class="card mb-2 room-card" *ngFor="let group of studentGroups">
+                            <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups" (click)="StudentGroupClicked(group)" >
                                 <div class="card-body p-2">
                                     <p class="mb-0">{{group.StudentGroup}}</p>
                                 </div>
@@ -30,7 +30,7 @@
         </div>
         <!-- Timetable column -->
         <div class="col-12 col-lg-6">
-            <full-calendar [options]="calendarOptions"></full-calendar>
+            <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
         </div>
     </div>
 </div>
