@@ -24,8 +24,9 @@ import { StudentGroup } from '../../../interfaces/student-group';
 export class StudentGroupsManagerComponent implements OnInit {
   // Properties
   private _studentGroupsCursor: object = {};
-  private _selectedStudentGroup: StudentGroup | null = null;
 
+  protected selectedStudentGroup: StudentGroup | null = null;
+  protected event:object = {};
   protected studentGroups: StudentGroup[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -57,6 +58,7 @@ export class StudentGroupsManagerComponent implements OnInit {
       })
     }
   };
+  protected loadingTimetable: boolean = false;
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
@@ -71,9 +73,10 @@ export class StudentGroupsManagerComponent implements OnInit {
 
   protected StudentGroupClicked(studentGroup: StudentGroup): void {
     // Set selected student group
-    this._selectedStudentGroup = studentGroup;
+    this.selectedStudentGroup = studentGroup;
 
     // Fetch timetable for student group
+    this.loadingTimetable = true;
     this.FetchTimetableForStudentGroup(studentGroup);
   }
 
@@ -92,6 +95,10 @@ export class StudentGroupsManagerComponent implements OnInit {
 
     // Fetch the timetable for the selected student group
     if (calendarApi != null) {
+      // Clear the current events
+      calendarApi.removeAllEvents();
+
+      // Fetch the timetable for the selected student group
       this._timetableApi.ReadSudentGroupTimetable(studentGroup.StudentGroup).subscribe((res:any) => {
         console.log(res);
 
@@ -109,6 +116,8 @@ export class StudentGroupsManagerComponent implements OnInit {
 
           calendarApi?.addEvent(newEvent);
         }
+
+        this.loadingTimetable = false;
       });
     }
   }

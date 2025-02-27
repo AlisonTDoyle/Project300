@@ -1,16 +1,16 @@
 <div class="container">
-    <form>
+    <form [formGroup]="eventForm">
         <div class="mb-2">
             <label class="form-label">Start Time</label>
-            <input type="time" class="form-control" value="09:00">
+            <input type="time" class="form-control" formControlName="StartTime">
         </div>
         <div class="mb-2">
             <label class="form-label">End Time</label>
-            <input type="time" class="form-control" value="09:00">
+            <input type="time" class="form-control" formControlName="EndTime">
         </div>
         <div class="mb-2">
             <label class="form-label">Day</label>
-            <select class="form-select">
+            <select class="form-select" formControlName="Day">
                 <option>Monday</option>
                 <option>Tuesday</option>
                 <option>Wednesday</option>
@@ -20,23 +20,27 @@
         </div>
         <div class="mb-2">
             <label class="form-label">Semester</label>
-            <select class="form-select">
+            <select class="form-select" formControlName="Semester">
                 <option>Winter</option>
                 <option>Summer</option>
             </select>
         </div>
         <div class="mb-2">
             <label class="form-label">Module Code</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" formControlName="ModuleCode">
         </div>
         <div class="mb-2">
             <label class="form-label">Student Group</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" formControlName="StudentGroup">
         </div>
         <div class="mb-2">
             <label class="form-label">Staff Member</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" formControlName="StaffId">
         </div>
-        <button type="button" class="btn btn-primary w-100">Create Event</button>
+        <div class="mb-2">
+            <label class="form-label">Room Number</label>
+            <input type="text" class="form-control" formControlName="RoomNo">
+        </div>
+        <button type="button" (click)="onSubmit()" class="btn btn-primary w-100">Create Event</button>
     </form>
 </div>

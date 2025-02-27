@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { co } from '@fullcalendar/core/internal-common';
-import { catchError, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,8 @@ export class TimetableApiService {
 
   // Methods
   // Create
-  public CreateEvent(event:any) {
-    this._http.post(this._apiUrl, event).subscribe((res) => {
-      return res;
-    });
+  public CreateEvent(event:any):Observable<any> {
+    return this._http.post(this._apiUrl, event).pipe();
   }
 
   public BatchCreateEvents(events:any[]) {

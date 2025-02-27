@@ -4,21 +4,25 @@
         <div class="col-12 col-lg-6">
             <div class="row h-100">
                 <div class="col-4">
-                    <div class="card p-2" style="height: auto">
+                    <!-- List of student groups -->
+                    <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
                         @if (studentGroups.length > 0) {
-                            <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups" (click)="StudentGroupClicked(group)" >
-                                <div class="card-body p-2">
-                                    <p class="mb-0">{{group.StudentGroup}}</p>
-                                </div>
+                        <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups"
+                            (click)="StudentGroupClicked(group)"
+                            [ngClass]="{'selected': group === selectedStudentGroup}">
+                            <div class="card-body p-2">
+                                <p class="mb-0">{{group.StudentGroup}}</p>
                             </div>
+                        </div>
                         }
                         @else {
-                            <div class="card-body p-2">
-                                <p class="mb-0">No student groups</p>
-                            </div>
+                        <div class="card-body p-2">
+                            <p class="mb-0">No student groups</p>
+                        </div>
                         }
                     </div>
                 </div>
+                <!-- Event management form -->
                 <div class="col-8">
                     <div class="card">
                         <div class="p-2">
@@ -30,7 +34,17 @@
         </div>
         <!-- Timetable column -->
         <div class="col-12 col-lg-6">
+            @if (selectedStudentGroup) {
+            <h2 class="fs-6">{{selectedStudentGroup?.StudentGroup}} Schedule</h2>
+                @if (loadingTimetable) {
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                }
             <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
+            } @else {
+            <p class="mb-0">Select a student group to view timetable</p>
+            }
         </div>
     </div>
 </div>
