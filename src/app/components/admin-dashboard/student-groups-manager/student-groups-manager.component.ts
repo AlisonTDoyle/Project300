@@ -26,7 +26,7 @@ export class StudentGroupsManagerComponent implements OnInit {
   private _studentGroupsCursor: object = {};
 
   protected selectedStudentGroup: StudentGroup | null = null;
-  protected event:object = {};
+  protected event: object = {};
   protected studentGroups: StudentGroup[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
@@ -89,36 +89,36 @@ export class StudentGroupsManagerComponent implements OnInit {
     });
   }
 
-  private FetchTimetableForStudentGroup(studentGroup: StudentGroup): void {
-    // Get the calendar API
-    let calendarApi = this.calendarComponent?.getApi();
-
-    // Fetch the timetable for the selected student group
-    if (calendarApi != null) {
-      // Clear the current events
-      calendarApi.removeAllEvents();
+  protected FetchTimetableForStudentGroup(studentGroup: StudentGroup | null): void {
+    if (studentGroup != null) {
+      // Get the calendar API
+      let calendarApi = this.calendarComponent?.getApi();
 
       // Fetch the timetable for the selected student group
-      this._timetableApi.ReadSudentGroupTimetable(studentGroup.StudentGroup).subscribe((res:any) => {
-        console.log(res);
+      if (calendarApi != null) {
+        // Clear the current events
+        calendarApi.removeAllEvents();
 
-        for (let i = 0; i < res.length; i++) {
-          let newEvent = {
-            title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name}`,
-            startTime: res[i]?.StartTime,
-            endTime: res[i]?.EndTime,
-            startRecur: "2024-11-11T11:00:00.000Z",
-            daysOfWeek: res[i]?.Day,
-            extendedProps: {
-              roomNumber: res[i]?.RoomNo
+        // Fetch the timetable for the selected student group
+        this._timetableApi.ReadSudentGroupTimetable(studentGroup.StudentGroup).subscribe((res: any) => {
+          for (let i = 0; i < res.length; i++) {
+            let newEvent = {
+              title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name}`,
+              startTime: res[i]?.StartTime,
+              endTime: res[i]?.EndTime,
+              startRecur: "2024-11-11T11:00:00.000Z",
+              daysOfWeek: res[i]?.Day,
+              extendedProps: {
+                roomNumber: res[i]?.RoomNo
+              }
             }
+
+            calendarApi?.addEvent(newEvent);
           }
 
-          calendarApi?.addEvent(newEvent);
-        }
-
-        this.loadingTimetable = false;
-      });
+          this.loadingTimetable = false;
+        });
+      }
     }
   }
 }

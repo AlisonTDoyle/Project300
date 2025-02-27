@@ -26,7 +26,7 @@
                 <div class="col-8">
                     <div class="card">
                         <div class="p-2">
-                            <app-event-management-form></app-event-management-form>
+                            <app-event-management-form [studentGroup]="selectedStudentGroup" (eventCreated)="FetchTimetableForStudentGroup(selectedStudentGroup)"></app-event-management-form>
                         </div>
                     </div>
                 </div>
@@ -36,12 +36,7 @@
         <div class="col-12 col-lg-6">
             @if (selectedStudentGroup) {
             <h2 class="fs-6">{{selectedStudentGroup?.StudentGroup}} Schedule</h2>
-                @if (loadingTimetable) {
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                }
-            <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
+                <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
             } @else {
             <p class="mb-0">Select a student group to view timetable</p>
             }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TimetableApiService } from '../../../services/timetable-api/timetable-api.service';
 import { Days } from '../../../enum/days';
+import { StudentGroup } from '../../../interfaces/student-group';
 
 @Component({
   selector: 'app-event-management-form',
@@ -13,6 +14,13 @@ import { Days } from '../../../enum/days';
   styleUrl: './event-management-form.component.scss'
 })
 export class EventManagementFormComponent {
+  // Inputs and outputs
+  @Input() studentGroup: StudentGroup|null = null;
+  @Input() staffMember: string = '';
+  @Input() roomNumber: string = '';
+
+  @Output() eventCreated = new EventEmitter();
+
   // Properties
   protected eventForm: FormGroup = new FormGroup({
     StartTime: new FormControl(''),
@@ -33,7 +41,7 @@ export class EventManagementFormComponent {
       Day: 'Monday',
       Semester: 'Winter',
       ModuleCode: '',
-      StudentGroup: '',
+      StudentGroup: this.studentGroup == null ? '' : this.studentGroup.StudentGroup,
       StaffId: '',
       RoomNo: ''
     });
@@ -56,7 +64,7 @@ export class EventManagementFormComponent {
     };
 
     this._timetableApiService.CreateEvent(newEvent).subscribe((res) => {
-      console.log(res);
+      this.eventCreated.emit(res);
     });
   }
 
