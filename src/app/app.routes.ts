@@ -4,6 +4,7 @@ import { ScheduleComponent } from './routes/schedule/schedule.component';
 import { RoomManagerComponent } from './components/admin-dashboard/room-manager/room-manager.component';
 import { StaffManagerComponent } from './components/admin-dashboard/staff-manager/staff-manager.component';
 import { StudentGroupsManagerComponent } from './components/admin-dashboard/student-groups-manager/student-groups-manager.component';
+import { SearchForTimetableComponent } from './components/search-for-timetable/search-for-timetable.component';
 
 export const routes: Routes = [
     {
@@ -13,6 +14,12 @@ export const routes: Routes = [
     {
         path: 'schedule',
         redirectTo: '/'
+    },
+    {
+        path:'search',
+        title:'Search For Timetable',
+        component: SearchForTimetableComponent,
+        pathMatch: 'full'
     },
     {
         path: 'admin',
