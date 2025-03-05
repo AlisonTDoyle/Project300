@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SearchService {
 
-  private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/search"
+  private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/{search+}"
 
   constructor(private http:HttpClient) { }
 
