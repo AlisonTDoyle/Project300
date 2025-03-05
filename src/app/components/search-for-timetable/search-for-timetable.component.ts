@@ -13,6 +13,7 @@ import { TimetableApiService } from '../../services/timetable-api/timetable-api.
 import { StudentGroup } from '../../interfaces/student-group';
 import { EventManagementFormComponent } from '../admin-dashboard/event-management-form/event-management-form.component';
 import { RoomManagerComponent } from '../admin-dashboard/room-manager/room-manager.component';
+import { SearchService } from '../../services/search/search.service';
 
 @Component({
   selector: 'app-search-for-timetable',
@@ -30,6 +31,9 @@ import { RoomManagerComponent } from '../admin-dashboard/room-manager/room-manag
 export class SearchForTimetableComponent implements OnInit {
   // Properties
   private _studentGroupsCursor: object = {};
+
+  searchQuery: string='';
+  searchResults: any[] = [];
 
   protected selectedStudentGroup: StudentGroup | null = null;
   protected event:object = {};
@@ -69,11 +73,21 @@ export class SearchForTimetableComponent implements OnInit {
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
 // Constructor
-constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService) { }
+constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService, private searchService: SearchService) { }
 
 // Event handlers
 ngOnInit(): void {
   this.FetchStudentGroups();
+}
+onSearch(){
+  console.log('button clicked')
+
+  if(!this.searchQuery.trim()) return;
+
+  this.searchService.searchDB(this.searchQuery).subscribe(results =>{
+    this.searchResults = results;
+    console.log('search results obtained')
+  });
 }
 
 protected StudentGroupClicked(studentGroup: StudentGroup): void {
