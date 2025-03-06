@@ -6,7 +6,7 @@ import * as bootstrap from "bootstrap";
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { AdminDashboardComponent } from '../../routes/admin-dashboard/admin-dashboard.component';
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { DatabaseApiService } from '../../services/database-api/database-api.service';
 import { Room } from '../../interfaces/room';
 import { TimetableApiService } from '../../services/timetable-api/timetable-api.service';
@@ -76,23 +76,29 @@ export class SearchForTimetableComponent implements OnInit {
 
   private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/search"
 // Constructor
-constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService, private searchService: SearchService) { }
+constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService, private searchService: SearchService, private http:HttpClient) { }
 
 // Event handlers
 ngOnInit(): void {
   this.FetchStudentGroups();
 }
-onSearch(text: string){
+onSearch(text: string): void{
   console.log('button clicked')
 
   if(this.searchQuery.trim()===''){
     this.filteredStudentGroup=[...this.searchItems]
   }
   else{
-    this.filteredStudentGroup = this.searchItems.filter(item =>
-      item.studentGroups.includes(this.searchQuery)
-    );
-  }
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+  const url =`${this.apiUrl}?searchText=${encodeURIComponent(this.searchQuery)}`;
+
+  this.http.get<any[]>(url, {headers}).subscribe(
+    (data: StudentGroup[]) => (this.filteredStudentGroup = data),
+    (error: any)=> console.error('Error fetching search results', error)
+  )};
   // if(!text) 
   //   {
   //     this.filteredStudentGroup = this.studentGroups; 
