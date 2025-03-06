@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { co } from '@fullcalendar/core/internal-common';
-import { catchError, Observable, tap } from 'rxjs';
+import { co, E } from '@fullcalendar/core/internal-common';
+import { catchError, map, Observable, tap } from 'rxjs';
+import { EventVerificationResponse } from '../../interfaces/request-responses/event-verification-response';
 
 @Injectable({
   providedIn: 'root'
@@ -60,5 +61,13 @@ export class TimetableApiService {
     let deleteUrl:string = `${this._apiUrl}/${eventId}`;
 
     return this._http.delete(deleteUrl).pipe();
+  }
+
+  // Misc.
+  public VerifyEventExistance(event:any): Observable<EventVerificationResponse> {
+    let verifyUrl:string = `${this._apiUrl}/verify`;
+    let verificationResult: boolean;
+
+    return this._http.post<EventVerificationResponse>(verifyUrl, event).pipe();
   }
 }

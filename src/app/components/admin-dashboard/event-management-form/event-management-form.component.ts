@@ -1,19 +1,22 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TimetableApiService } from '../../../services/timetable-api/timetable-api.service';
 import { Days } from '../../../enum/days';
 import { StudentGroup } from '../../../interfaces/student-group';
+import { EventVerificationResponse } from '../../../interfaces/request-responses/event-verification-response';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-event-management-form',
   standalone: true,
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './event-management-form.component.html',
   styleUrl: './event-management-form.component.scss'
 })
-export class EventManagementFormComponent {
+export class EventManagementFormComponent implements OnChanges {
   // Inputs and outputs
   @Input() studentGroup: StudentGroup|null = null;
   @Input() staffMember: string = '';
@@ -33,6 +36,11 @@ export class EventManagementFormComponent {
     RoomNo: new FormControl(''),
   });
 
+  protected showStudentGroupField:boolean = true;
+  protected showStaffIdField:boolean = true;
+  protected showRoomNoField:boolean = true;
+  protected eventConflicts:string[]|undefined = [];
+
   // Constructor
   constructor(private _timetableApiService: TimetableApiService) {
     this.eventForm.setValue({
@@ -41,7 +49,7 @@ export class EventManagementFormComponent {
       Day: 'Monday',
       Semester: 'Winter',
       ModuleCode: '',
-      StudentGroup: this.studentGroup == null ? '' : this.studentGroup.StudentGroup,
+      StudentGroup: '',
       StaffId: '',
       RoomNo: ''
     });
@@ -49,6 +57,25 @@ export class EventManagementFormComponent {
 
   // Event handlers
   protected onSubmit() {
+    this.CreateNewEvent();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+
+    if (changes['StudentGroup'] && this.studentGroup) {
+      this.eventForm.patchValue({ StudentGroup: this.studentGroup.StudentGroup });
+      this.showStudentGroupField = false;
+    }
+    if (changes['staffMember'] && this.staffMember !== '') {
+      this.showStaffIdField = false;
+    }
+    if (changes['roomNumber'] && this.roomNumber !== '') {
+      this.showRoomNoField = false;
+    }
+  }
+
+  // Methods
+  private CreateNewEvent() {
     let newEvent = {
       Day:[ Days[this.eventForm.value.Day as keyof typeof Days]],
       EndTime: this.eventForm.value.EndTime || "13:00",
@@ -63,10 +90,21 @@ export class EventManagementFormComponent {
       StudentGroup: this.eventForm.value.StudentGroup || "SG_KSODV_H08/F/Y3/1/(A)"
     };
 
-    this._timetableApiService.CreateEvent(newEvent).subscribe((res) => {
-      this.eventCreated.emit(res);
+    // Check if event exists
+    let eventExists: boolean | undefined = false;
+    this._timetableApiService.VerifyEventExistance(newEvent).subscribe((res:EventVerificationResponse) => {
+      console.log(res)
+      
+      eventExists = res.ConflictExists;
+      this.eventConflicts = (res.Conflicts?.length ?? 0) >= 1 ? res.Conflicts : [];
+
+      // Create event
+      if (this.eventConflicts && this.eventConflicts.length == 0) {
+        console.log("hello")
+        this._timetableApiService.CreateEvent(newEvent).subscribe((res) => {
+          this.eventCreated.emit();
+        });
+      }
     });
   }
-
-  // Methods
 }

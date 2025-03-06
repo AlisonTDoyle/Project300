@@ -41,6 +41,11 @@
             <label class="form-label">Room Number</label>
             <input type="text" class="form-control" formControlName="RoomNo">
         </div>
+        <p class="text-danger">
+            <span *ngFor="let conflict of eventConflicts">
+                {{ conflict }}<br>
+            </span>
+        </p>
         <button type="button" (click)="onSubmit()" class="btn btn-primary w-100">Create Event</button>
     </form>
 </div>
