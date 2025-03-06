@@ -53,7 +53,7 @@ export class StudentGroupsManagerComponent implements OnInit {
         title: info.event.title,
         placement: "auto",
         trigger: "hover",
-        content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['room']})</p>`,
+        content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['roomType']})</p>`,
         html: true
       })
     }
@@ -101,17 +101,20 @@ export class StudentGroupsManagerComponent implements OnInit {
 
         // Fetch the timetable for the selected student group
         this._timetableApi.ReadSudentGroupTimetable(studentGroup.StudentGroup).subscribe((res: any) => {
+
           for (let i = 0; i < res.length; i++) {
             let newEvent = {
-              title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name}`,
+              title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name.S}`,
               startTime: res[i]?.StartTime,
               endTime: res[i]?.EndTime,
               startRecur: "2024-11-11T11:00:00.000Z",
               daysOfWeek: res[i]?.Day,
               extendedProps: {
-                roomNumber: res[i]?.RoomNo
+                roomNumber: res[i]?.RoomNo,
+                roomType: res[i]?.Room.Type.S
               }
             }
+            console.log(newEvent)
 
             calendarApi?.addEvent(newEvent);
           }

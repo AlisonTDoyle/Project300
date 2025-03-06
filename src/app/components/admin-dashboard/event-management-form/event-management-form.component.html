@@ -31,7 +31,10 @@
         </div>
         <div class="mb-2">
             <label class="form-label">Student Group</label>
-            <input type="text" class="form-control" formControlName="StudentGroup">
+            <input type="text" class="form-control" formControlName="StudentGroup" list="studentGroups">
+            <datalist id="studentGroups">
+                <option *ngFor="let group of studentGroups" value="{{group.StudentGroup}}">{{group.StudentGroup}}</option>
+            </datalist>
         </div>
         <div class="mb-2">
             <label class="form-label">Staff Member</label>
@@ -39,7 +42,10 @@
         </div>
         <div class="mb-2">
             <label class="form-label">Room Number</label>
-            <input type="text" class="form-control" formControlName="RoomNo">
+            <input type="text" class="form-control" list="rooms" formControlName="RoomNo">
+            <datalist id="rooms">
+                <option *ngFor="let room of rooms" value="{{room.RoomNo}}">{{room.RoomNo}}</option>
+            </datalist>
         </div>
         <p class="text-danger">
             <span *ngFor="let conflict of eventConflicts">

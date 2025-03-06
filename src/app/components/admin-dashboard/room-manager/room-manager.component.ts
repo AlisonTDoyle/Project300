@@ -86,8 +86,6 @@ export class RoomManagerComponent implements OnInit {
       calendarApi.removeAllEvents();
 
       this._timetableApi.ReadRoomTimetable(this._selectedRoom.RoomNo).subscribe((res) => {
-        console.log(res);
-
         for (let i = 0; i < res.length; i++) {
           let newEvent = {
             title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name}`,

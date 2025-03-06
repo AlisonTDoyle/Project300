@@ -5,6 +5,9 @@ import { Days } from '../../../enum/days';
 import { StudentGroup } from '../../../interfaces/student-group';
 import { EventVerificationResponse } from '../../../interfaces/request-responses/event-verification-response';
 import { CommonModule } from '@angular/common';
+import { DatabaseApiService } from '../../../services/database-api/database-api.service';
+import { Room } from '../../../interfaces/room';
+import { PaginatedRoomResponse } from '../../../interfaces/request-responses/paginated-room-response';
 
 @Component({
   selector: 'app-event-management-form',
@@ -40,9 +43,12 @@ export class EventManagementFormComponent implements OnChanges {
   protected showStaffIdField:boolean = true;
   protected showRoomNoField:boolean = true;
   protected eventConflicts:string[]|undefined = [];
+  protected studentGroups:StudentGroup[] = [];
+  protected rooms:Room[] = [];
+  protected modules:string[] = [];
 
   // Constructor
-  constructor(private _timetableApiService: TimetableApiService) {
+  constructor(private _timetableApiService: TimetableApiService, private _databaseApiService:DatabaseApiService) {
     this.eventForm.setValue({
       StartTime: '09:00',
       EndTime: '10:00',
@@ -53,6 +59,9 @@ export class EventManagementFormComponent implements OnChanges {
       StaffId: '',
       RoomNo: ''
     });
+
+    this.FetchRooms();
+    this.FetchStudentGroups();
   }
 
   // Event handlers
@@ -75,6 +84,24 @@ export class EventManagementFormComponent implements OnChanges {
   }
 
   // Methods
+  private FetchRooms() {
+    this._databaseApiService.ReadRoomsWithPagination(20, {}).subscribe((res) => {
+      this.rooms = res.rooms;
+    });
+  }
+
+  private FetchStudentGroups() {
+    this._databaseApiService.ReadStudentGroupsWithPagination(20, {}).subscribe((res) => {
+      this.studentGroups = res.studentGroups;
+    });
+  }
+
+  // private FetchModules() {
+  //   this._databaseApiService.ReadRoomsWithPagination(20, {}).subscribe((res) => {
+  //     this.rooms = res.rooms;
+  //   });
+  // }
+
   private CreateNewEvent() {
     let newEvent = {
       Day:[ Days[this.eventForm.value.Day as keyof typeof Days]],
