@@ -38,6 +38,7 @@ export class SearchForTimetableComponent implements OnInit {
   protected selectedStudentGroup: StudentGroup | null = null;
   protected event:object = {};
   protected studentGroups: StudentGroup[] = [];
+  protected filteredStudentGroup: StudentGroup[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
@@ -79,15 +80,20 @@ constructor(private _databaseApi:DatabaseApiService, private _timetableApi:Timet
 ngOnInit(): void {
   this.FetchStudentGroups();
 }
-onSearch(){
+onSearch(text: string){
   console.log('button clicked')
 
-  if(!this.searchQuery.trim()) return;
+  if(!text) this.filteredStudentGroup = this.studentGroups;
 
-  this.searchService.searchDB(this.searchQuery).subscribe(results =>{
-    this.searchResults = results;
-    console.log('search results obtained')
-  });
+  this.filteredStudentGroup = this.studentGroups.filter(
+    StudentGroup => this.studentGroups?.values.toString().includes(text)
+  )
+  // if(!this.searchQuery.trim()) return;
+
+  // this.searchService.searchDB(this.searchQuery).subscribe(results =>{
+  //   this.searchResults = results;
+  //   console.log('search results obtained')
+  // });
 }
 
 protected StudentGroupClicked(studentGroup: StudentGroup): void {
