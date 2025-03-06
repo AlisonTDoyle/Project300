@@ -33,6 +33,7 @@ export class SearchForTimetableComponent implements OnInit {
   private _studentGroupsCursor: object = {};
 
   searchQuery: string='';
+  searchItems:any[]=[];
   searchResults: any[] = [];
 
   protected selectedStudentGroup: StudentGroup | null = null;
@@ -73,6 +74,7 @@ export class SearchForTimetableComponent implements OnInit {
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
+  private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/search"
 // Constructor
 constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService, private searchService: SearchService) { }
 
@@ -83,11 +85,23 @@ ngOnInit(): void {
 onSearch(text: string){
   console.log('button clicked')
 
-  if(!text) this.filteredStudentGroup = this.studentGroups;
+  if(this.searchQuery.trim()===''){
+    this.filteredStudentGroup=[...this.searchItems]
+  }
+  else{
+    this.filteredStudentGroup = this.searchItems.filter(item =>
+      item.studentGroups.includes(this.searchQuery)
+    );
+  }
+  // if(!text) 
+  //   {
+  //     this.filteredStudentGroup = this.studentGroups; 
+  //     return;
+  //   }
 
-  this.filteredStudentGroup = this.studentGroups.filter(
-    StudentGroup => this.studentGroups?.values.toString().includes(text)
-  )
+  // this.filteredStudentGroup = this.studentGroups.filter(
+  //   StudentGroup => this.studentGroups?.toString().includes(text.toUpperCase())
+  // )
   // if(!this.searchQuery.trim()) return;
 
   // this.searchService.searchDB(this.searchQuery).subscribe(results =>{

@@ -1,4 +1,3 @@
-<p>search-for-timetable works!</p>
 <div class="container-fluid h-100">
     <h1>Timetable Selection</h1>
     <div class="row my-2">
@@ -6,19 +5,26 @@
             <div class="card">
                 <div class="container">
                     <div class="input-group my-3">
-                        <input type="text" class="form-control" placeholder="Search Student Group"
-                            aria-label="Recipient's username" aria-describedby="basic-addon2" searchEnabled="true">
-                        <button class="btn btn-primary" id="basic-addon2" type="button" (click)="onSearch(filter.value)" #filter><span class="bi bi-search"></span></button>
+                        <input type="text" class="form-control" placeholder="Search Student Group" 
+                            aria-label="Recipient's username" aria-describedby="basic-addon2" searchEnabled="true" #filter>
+                        <button class="btn btn-primary" id="basic-addon2" type="button" (click)="onSearch(filter.value)"><span class="bi bi-search"></span></button>
                     </div>
                     <hr>
                     <div style="max-height: 80vh; overflow-y: auto;">
-                        <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups"
-                        (click)="StudentGroupClicked(group)" 
-                        [ngClass]="{'selected': group === selectedStudentGroup}" >    
-                            <div class="card-body p-2">
-                                <p class="mb-0">{{group.StudentGroup}}</p>
+                        @if (studentGroups.length > 0) {
+                            <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups"
+                                (click)="StudentGroupClicked(group)"
+                                [ngClass]="{'selected': group === selectedStudentGroup}">
+                                <div class="card-body p-2">
+                                    <p class="mb-0">{{group.StudentGroup}}</p>
+                                </div>
                             </div>
-                        </div>
+                            }
+                            @else {
+                            <div class="card-body p-2">
+                                <p class="mb-0">No student groups</p>
+                            </div>
+                            }
                     </div>
                 </div>
             </div>

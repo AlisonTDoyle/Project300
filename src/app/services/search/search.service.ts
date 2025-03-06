@@ -12,6 +12,6 @@ export class SearchService {
   constructor(private http:HttpClient) { }
 
   searchDB(query:string):Observable<any>{
-    return this.http.get(`${this.apiUrl}?query=${query}`);
+    return this.http.get<any>(`${this.apiUrl}?query=${query}`);
   }
 }
