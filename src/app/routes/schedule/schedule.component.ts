@@ -91,7 +91,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   // ***********************************************************************************************
-  // Loading the Schedule.
+  // Loading the Schedule. - now unused
   private loadSchedule(): void 
   {
     this.http.get<any[]>('./assets/schedule.json').subscribe(
@@ -246,7 +246,6 @@ export class ScheduleComponent implements OnInit {
           <strong>${eventInfo.event.title}</strong>
           <br>
           <em>${eventInfo.event.extendedProps['room']}</em>
-          <br>
           <small>${eventInfo.event.extendedProps['roomNumber']}</small>
         </div>
       `
