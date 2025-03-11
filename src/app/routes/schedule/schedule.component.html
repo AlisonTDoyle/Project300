@@ -208,14 +208,12 @@
     <!----------------------->
     <div class="greeting" style="text-align: center;"> <h3>Hello Jake!</h3> </div>
     
-    <br/><br/>
-
     <!-- Sidebar to select timetable-->
     <!------>
     <div class="container-fluid h-100 timetable-container">
-        <div class="row my-2">
-            <div class="col-2">
-                <div class="card">
+        <div class="row my-32">
+            <div class="col-12">
+                <div class="card-body">
                     <div class="container">
                         <div class="input-group my-3">
                             <input type="text" class="form-control" placeholder="Search Student Group" 
@@ -242,8 +240,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-11">
-                <div class="card p-2">
+            <div class="col-16">
+                <div class="card-body p-2" style="max-height: 90vh; overflow-y: auto;">
                         <full-calendar class="h-100" style="max-height: 60vh;" #programPreview [options]="calendarOptions" [events]="schedule"></full-calendar>
                 </div>
             </div>
@@ -255,7 +253,16 @@
     <!-- Calling the Timetable -->
     <!--------------------------->
 
-    <full-calendar class="h-100" style="max-height: 60vh;" #programPreview [options]="calendarOptions" [events]="schedule"></full-calendar>
+    <!-- <div class="col-8">
+        <div class="card p-2">
+            <div class="container">
+                <full-calendar class="h-100" style="max-height: 60vh;" #programPreview  [options]="calendarOptions"></full-calendar>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+    </div> -->
+    <!-- <full-calendar class="h-100" style="max-height: 60vh;" #programPreview [options]="calendarOptions" [events]="schedule"></full-calendar> -->
 
     <!-- File Select -->
     <!----------------->
