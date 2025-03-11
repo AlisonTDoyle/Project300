@@ -74,7 +74,7 @@ export class SearchForTimetableComponent implements OnInit {
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
-  private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/search"
+  private apiUrl = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/search?searchtext="
 // Constructor
 constructor(private _databaseApi:DatabaseApiService, private _timetableApi:TimetableApiService, private searchService: SearchService, private http:HttpClient) { }
 
@@ -83,22 +83,31 @@ ngOnInit(): void {
   this.FetchStudentGroups();
 }
 onSearch(text: string): void{
-  console.log('button clicked')
+  console.log('button clicked');
 
-  if(this.searchQuery.trim()===''){
-    this.filteredStudentGroup=[...this.searchItems]
-  }
-  else{
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
+  this.http.get<any>(this.apiUrl + text).subscribe(
+    (response) =>{
+      this.searchResults = response.searchResults;
+    },
+    (error) =>{
+      console.log('Error fetching data', error)
+    }
+  );
 
-  const url =`${this.apiUrl}?searchText=${encodeURIComponent(this.searchQuery)}`;
+  // if(this.searchQuery.trim()===''){
+  //   this.filteredStudentGroup=[...this.searchItems]
+  // }
+  // else{
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //   });
 
-  this.http.get<any[]>(url, {headers}).subscribe(
-    (data: StudentGroup[]) => (this.filteredStudentGroup = data),
-    (error: any)=> console.error('Error fetching search results', error)
-  )};
+  // const url =`${this.apiUrl}?searchText=${encodeURIComponent(this.searchQuery)}`;
+
+  // this.http.get<any[]>(url, {headers}).subscribe(
+  //   (data: StudentGroup[]) => (this.filteredStudentGroup = data),
+  //   (error: any)=> console.error('Error fetching search results', error)
+  // )};
   // if(!text) 
   //   {
   //     this.filteredStudentGroup = this.studentGroups; 
