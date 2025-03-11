@@ -25,7 +25,9 @@ export class StudentGroupsManagerComponent implements OnInit {
   // Properties
   private _studentGroupsCursor: object = {};
 
-  protected selectedStudentGroup: StudentGroup | null = null;
+  protected selectedStudentGroup: StudentGroup | null = {
+    StudentGroup: ""
+  };
   protected event: object = {};
   protected studentGroups: StudentGroup[] = [];
   protected calendarOptions: CalendarOptions = {
@@ -37,7 +39,7 @@ export class StudentGroupsManagerComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'timeGridWeek,timeGridDay' // user can switch between the two
+      right: 'timeGridWeek,timeGridDay'
     },
     weekends: false,
     editable: false,
