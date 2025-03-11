@@ -21,9 +21,9 @@ import { PaginatedRoomResponse } from '../../../interfaces/request-responses/pag
 })
 export class EventManagementFormComponent implements OnChanges {
   // Inputs and outputs
-  @Input() studentGroup: StudentGroup|null = null;
+  @Input() studentGroup: StudentGroup | null = null;
   @Input() staffMember: string = '';
-  @Input() roomNumber: string = '';
+  @Input() roomNumber: Room | null = null;
 
   @Output() eventCreated = new EventEmitter();
 
@@ -39,16 +39,16 @@ export class EventManagementFormComponent implements OnChanges {
     RoomNo: new FormControl(''),
   });
 
-  protected showStudentGroupField:boolean = true;
-  protected showStaffIdField:boolean = true;
-  protected showRoomNoField:boolean = true;
-  protected eventConflicts:string[]|undefined = [];
-  protected studentGroups:StudentGroup[] = [];
-  protected rooms:Room[] = [];
-  protected modules:string[] = [];
+  protected showStudentGroupField: boolean = true;
+  protected showStaffIdField: boolean = true;
+  protected showRoomNoField: boolean = true;
+  protected eventConflicts: string[] | undefined = [];
+  protected studentGroups: StudentGroup[] = [];
+  protected rooms: Room[] = [];
+  protected modules: string[] = [];
 
   // Constructor
-  constructor(private _timetableApiService: TimetableApiService, private _databaseApiService:DatabaseApiService) {
+  constructor(private _timetableApiService: TimetableApiService, private _databaseApiService: DatabaseApiService) {
     this.eventForm.setValue({
       StartTime: '09:00',
       EndTime: '10:00',
@@ -70,17 +70,22 @@ export class EventManagementFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    // hide form with values passed
+    this.showStudentGroupField = this.studentGroup == null ? true : false
+    this.showStaffIdField = this.staffMember == null ? true : false
+    this.showRoomNoField = this.roomNumber == null ? true : false
 
-    if (changes['StudentGroup'] && this.studentGroup) {
-      this.eventForm.patchValue({ StudentGroup: this.studentGroup.StudentGroup });
-      this.showStudentGroupField = false;
-    }
-    if (changes['staffMember'] && this.staffMember !== '') {
-      this.showStaffIdField = false;
-    }
-    if (changes['roomNumber'] && this.roomNumber !== '') {
-      this.showRoomNoField = false;
-    }
+    // fill in form with passed details
+    this.eventForm.setValue({
+      StartTime: '09:00',
+      EndTime: '10:00',
+      Day: 'Monday',
+      Semester: 'Winter',
+      ModuleCode: '',
+      StudentGroup: this.studentGroup?.StudentGroup,
+      StaffId: '',
+      RoomNo: ''
+    });
   }
 
   // Methods
@@ -104,7 +109,7 @@ export class EventManagementFormComponent implements OnChanges {
 
   private CreateNewEvent() {
     let newEvent = {
-      Day:[ Days[this.eventForm.value.Day as keyof typeof Days]],
+      Day: [Days[this.eventForm.value.Day as keyof typeof Days]],
       EndTime: this.eventForm.value.EndTime || "13:00",
       Module: { Name: { S: this.eventForm.value.ModuleName || "Database Programming" } },
       ModuleCode: this.eventForm.value.ModuleCode || "COMP-7176",
@@ -119,9 +124,9 @@ export class EventManagementFormComponent implements OnChanges {
 
     // Check if event exists
     let eventExists: boolean | undefined = false;
-    this._timetableApiService.VerifyEventExistance(newEvent).subscribe((res:EventVerificationResponse) => {
+    this._timetableApiService.VerifyEventExistance(newEvent).subscribe((res: EventVerificationResponse) => {
       console.log(res)
-      
+
       eventExists = res.ConflictExists;
       this.eventConflicts = (res.Conflicts?.length ?? 0) >= 1 ? res.Conflicts : [];
 
