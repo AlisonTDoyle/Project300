@@ -61,6 +61,7 @@ export class StudentGroupsManagerComponent implements OnInit {
     }
   };
   protected loadingTimetable: boolean = false;
+  protected loadMoreStudents:boolean =true;
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
@@ -83,11 +84,16 @@ export class StudentGroupsManagerComponent implements OnInit {
   }
 
   // Methods
-  private FetchStudentGroups(): void {
+  protected FetchStudentGroups(): void {
     this._databaseApi.ReadStudentGroupsWithPagination(20, this._studentGroupsCursor).subscribe((res) => {
       res.studentGroups.map((group) => {
         this.studentGroups.push(group)
       });
+
+      // check if there is more to load
+      if (this._studentGroupsCursor == res.cursor || res.studentGroups.length < 20) {
+        this.loadMoreStudents = false
+      }
 
       this._studentGroupsCursor = res.cursor;
     });
