@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, OnChanges } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TimetableApiService } from '../../../services/timetable-api/timetable-api.service';
 import { Days } from '../../../enum/days';
 import { StudentGroup } from '../../../interfaces/student-group';
@@ -22,21 +22,21 @@ import { PaginatedRoomResponse } from '../../../interfaces/request-responses/pag
 export class EventManagementFormComponent implements OnChanges {
   // Inputs and outputs
   @Input() studentGroup: StudentGroup | null = null;
-  @Input() staffMember: string = '';
+  @Input() staffMember: string|null = null;
   @Input() roomNumber: Room | null = null;
 
   @Output() eventCreated = new EventEmitter();
 
   // Properties
   protected eventForm: FormGroup = new FormGroup({
-    StartTime: new FormControl(''),
-    EndTime: new FormControl(''),
-    Day: new FormControl(''),
-    Semester: new FormControl(''),
-    ModuleCode: new FormControl(''),
-    StudentGroup: new FormControl(''),
-    StaffId: new FormControl(''),
-    RoomNo: new FormControl(''),
+    StartTime: new FormControl('', [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]),
+    EndTime: new FormControl('', [Validators.required, Validators.pattern(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/)]),
+    Day: new FormControl('Select Day...', [Validators.required]),
+    Semester: new FormControl('', [Validators.required]),
+    ModuleCode: new FormControl('', [Validators.required]),
+    StudentGroup: new FormControl('', [Validators.required]),
+    StaffId: new FormControl('', [Validators.required]),
+    RoomNo: new FormControl('', [Validators.required]),
   });
 
   protected showStudentGroupField: boolean = true;
@@ -52,7 +52,7 @@ export class EventManagementFormComponent implements OnChanges {
     this.eventForm.setValue({
       StartTime: '09:00',
       EndTime: '10:00',
-      Day: 'Monday',
+      Day: 'Select Day...',
       Semester: 'Winter',
       ModuleCode: '',
       StudentGroup: '',
@@ -79,11 +79,11 @@ export class EventManagementFormComponent implements OnChanges {
     this.eventForm.setValue({
       StartTime: '09:00',
       EndTime: '10:00',
-      Day: 'Monday',
+      Day: 'Select Day...',
       Semester: 'Winter',
       ModuleCode: '',
       StudentGroup: this.studentGroup?.StudentGroup,
-      StaffId: '',
+      StaffId: "",
       RoomNo: ''
     });
   }
@@ -138,5 +138,38 @@ export class EventManagementFormComponent implements OnChanges {
         });
       }
     });
+  }
+
+  // Form fields
+  get startTime() {
+    return this.eventForm.get('StartTime');
+  }
+
+  get endTime() {
+    return this.eventForm.get('EndTime');
+  }
+
+  get day() {
+    return this.eventForm.get('Day');
+  }
+
+  get semester() {
+    return this.eventForm.get('Semester');
+  }
+
+  get moduleCode() {
+    return this.eventForm.get('ModuleCode');
+  }
+
+  get studentGroupField() {
+    return this.eventForm.get('StudentGroup');
+  }
+
+  get staffId() {
+    return this.eventForm.get('StaffId');
+  }
+
+  get roomNo() {
+    return this.eventForm.get('RoomNo');
   }
 }

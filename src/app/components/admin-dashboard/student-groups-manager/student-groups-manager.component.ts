@@ -85,7 +85,9 @@ export class StudentGroupsManagerComponent implements OnInit {
   // Methods
   private FetchStudentGroups(): void {
     this._databaseApi.ReadStudentGroupsWithPagination(20, this._studentGroupsCursor).subscribe((res) => {
-      this.studentGroups = res.studentGroups;
+      res.studentGroups.map((group) => {
+        this.studentGroups.push(group)
+      });
 
       this._studentGroupsCursor = res.cursor;
     });
