@@ -1,1 +1,31 @@
-<p>staff-manager works!</p>
+<div class="container-fluid">
+    <div class="row my-4">
+        <!-- Details column -->
+        <div class="col-12 col-lg-6">
+            <div class="row h-100">
+                <div class="col-4">
+                    <!-- List of student groups -->
+                    <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
+                        staff list
+                    </div>
+                </div>
+                <!-- Event management form -->
+                <div class="col-8">
+                    <div class="card">
+                        <div class="p-2">
+                            <app-event-management-form></app-event-management-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Timetable column -->
+        <div class="col-12 col-lg-6">
+            @if (selectedStaffMember) {
+                <full-calendar></full-calendar>
+            } @else {
+            <p class="mb-0">Select a staff member to view timetable</p>
+            }
+        </div>
+    </div>
+</div>
