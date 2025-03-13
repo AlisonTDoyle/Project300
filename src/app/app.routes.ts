@@ -15,6 +15,7 @@ export const routes: Routes = [
         path: 'schedule',
         redirectTo: '/'
     },
+
     {
         path:'search',
         title:'Search For Timetable',
