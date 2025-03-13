@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { DatabaseApiService } from '../../../services/database-api/database-api.service';
 import { Room } from '../../../interfaces/room';
 import { PaginatedRoomResponse } from '../../../interfaces/request-responses/paginated-room-response';
+import { EventApi } from '@fullcalendar/core';
 
 @Component({
   selector: 'app-event-management-form',
@@ -22,8 +23,9 @@ import { PaginatedRoomResponse } from '../../../interfaces/request-responses/pag
 export class EventManagementFormComponent implements OnChanges {
   // Inputs and outputs
   @Input() studentGroup: StudentGroup | null = null;
-  @Input() staffMember: string|null = null;
+  @Input() staffMember: string | null = null;
   @Input() roomNumber: Room | null = null;
+  @Input() event: EventApi | null = null;
 
   @Output() eventCreated = new EventEmitter();
 
@@ -65,8 +67,12 @@ export class EventManagementFormComponent implements OnChanges {
   }
 
   // Event handlers
-  protected onSubmit() {
-    this.CreateNewEvent();
+  protected onSubmit(buttonClicked:string) {
+    if (buttonClicked == 'update') {
+      this.UpdateEvent();
+    } else if (buttonClicked == 'create') {
+      this.CreateNewEvent();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -75,17 +81,30 @@ export class EventManagementFormComponent implements OnChanges {
     this.showStaffIdField = this.staffMember == null ? true : false
     this.showRoomNoField = this.roomNumber == null ? true : false
 
-    // fill in form with passed details
-    this.eventForm.setValue({
-      StartTime: '09:00',
-      EndTime: '10:00',
-      Day: 'Select Day...',
-      Semester: 'Winter',
-      ModuleCode: '',
-      StudentGroup: this.studentGroup?.StudentGroup,
-      StaffId: "",
-      RoomNo: ''
-    });
+    if (this.event != null) {
+      this.eventForm.patchValue({
+        StartTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.event.start?.getTime()),
+        EndTime: this.ConvertMillisecondsSinceEpochToTimeStamp(this.event.end?.getTime()),
+        Day: this.event.start ? Days[this.event.start.getDay() as unknown as keyof typeof Days] : 'Select Day...',
+        Semester: 'Winter',
+        ModuleCode: this.event.title.split(" - ")[0],
+        StudentGroup: this.studentGroup?.StudentGroup,
+        StaffId: this.event.extendedProps['staffId'],
+        RoomNo: this.event.extendedProps['roomNumber']
+      });
+    } else {
+      // fill in form with passed details
+      this.eventForm.setValue({
+        StartTime: '09:00',
+        EndTime: '10:00',
+        Day: 'Select Day...',
+        Semester: 'Winter',
+        ModuleCode: '',
+        StudentGroup: this.studentGroup?.StudentGroup,
+        StaffId: "",
+        RoomNo: ''
+      });
+    }
   }
 
   // Methods
@@ -138,6 +157,61 @@ export class EventManagementFormComponent implements OnChanges {
         });
       }
     });
+  }
+
+  private ConvertMillisecondsSinceEpochToTimeStamp(duration: number | undefined): string {
+    // Method from: https://stackoverflow.com/a/19700358
+    if (duration != undefined) {
+      let seconds: number = Math.floor((duration / 1000) % 60);
+      let minutes: number = Math.floor((duration / (1000 * 60)) % 60);
+      let hours: number = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+      let hoursAsString: string | number = (hours < 10) ? "0" + hours : hours;
+      let minutesAsString: string | number = (minutes < 10) ? "0" + minutes : minutes;
+      let secondsAsString: string | number = (seconds < 10) ? "0" + seconds : seconds;
+
+      return hoursAsString + ":" + minutesAsString;
+    } else {
+      return "";
+    }
+  }
+
+  protected ClearForm() {
+    this.event = null;
+
+    this.eventForm.setValue({
+      StartTime: '09:00',
+      EndTime: '10:00',
+      Day: 'Select Day...',
+      Semester: 'Winter',
+      ModuleCode: '',
+      StudentGroup: '',
+      StaffId: '',
+      RoomNo: ''
+    });
+  }
+
+  private UpdateEvent() {
+    let updatedEvent = {
+      _id: this.event?.id,
+      Day: [Days[this.eventForm.value.Day as keyof typeof Days]],
+      EndTime: this.eventForm.value.EndTime || "13:00",
+      Module: { Name: { S: this.eventForm.value.ModuleName || "Database Programming" } },
+      ModuleCode: this.eventForm.value.ModuleCode || "COMP-7176",
+      Room: { Type: { S: this.eventForm.value.RoomType || "Tiered Classroom" }, Seats: { N: this.eventForm.value.RoomSeats || "100" } },
+      RoomNo: this.eventForm.value.RoomNo || "D1001",
+      Semester: this.eventForm.value.Semester || null,
+      Staff: { FullName: { S: this.eventForm.value.StaffFullName || "John Doe" } },
+      StaffId: this.eventForm.value.StaffId || "ABCD1234",
+      StartTime: this.eventForm.value.StartTime || "11:00",
+      StudentGroup: this.eventForm.value.StudentGroup || "SG_KSODV_H08/F/Y3/1/(A)"
+    };
+
+    if (updatedEvent._id != undefined) {
+      this._timetableApiService.UpdateEvent(updatedEvent, updatedEvent._id).subscribe(() => {
+        this.eventCreated.emit();
+      })
+    }
   }
 
   // Form fields

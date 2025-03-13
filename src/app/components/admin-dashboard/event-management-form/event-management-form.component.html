@@ -1,5 +1,5 @@
 <div class="container">
-    <form [formGroup]="eventForm" (submit)="onSubmit()">
+    <form [formGroup]="eventForm">
         <div class="mb-2">
             <label class="form-label">Start Time</label>
             <input type="time" class="form-control" formControlName="StartTime" required>
@@ -78,6 +78,8 @@
                 {{ conflict }}<br>
             </span>
         </p>
-        <button class="btn btn-primary w-100">Create Event</button>
+        <button class="btn btn-secondary w-100 mb-2" type="button" (click)="ClearForm()" [ngClass]="{'d-none': event == null}">Clear Form</button>
+        <button class="btn btn-primary w-100 mb-2" (click)="onSubmit('update')" [ngClass]="{'d-none': event == null}">Update Event</button>
+        <button class="btn btn-primary w-100 mb-2" (click)="onSubmit('create')" [ngClass]="{'d-none': event != null}">Create Event</button>
     </form>
 </div>

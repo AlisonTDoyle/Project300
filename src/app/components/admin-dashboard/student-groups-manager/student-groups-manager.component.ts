@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { EventManagementFormComponent } from '../event-management-form/event-management-form.component';
 import { FullCalendarComponent, FullCalendarModule } from '@fullcalendar/angular';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarOptions, EventApi, EventClickArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import * as bootstrap from "bootstrap";
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -58,10 +58,12 @@ export class StudentGroupsManagerComponent implements OnInit {
         content: `<p>${info.event.extendedProps['roomNumber']} (${info.event.extendedProps['roomType']})</p>`,
         html: true
       })
-    }
+    },
+    eventClick: this.handleEventClick.bind(this),
   };
   protected loadingTimetable: boolean = false;
   protected loadMoreStudents:boolean =true;
+  protected selectedEvent:EventApi | null = null;
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
@@ -81,6 +83,10 @@ export class StudentGroupsManagerComponent implements OnInit {
     // Fetch timetable for student group
     this.loadingTimetable = true;
     this.FetchTimetableForStudentGroup(studentGroup);
+  }
+
+  protected handleEventClick(clickInfo:EventClickArg) {
+    this.selectedEvent = clickInfo.event;
   }
 
   // Methods
@@ -114,6 +120,7 @@ export class StudentGroupsManagerComponent implements OnInit {
 
           for (let i = 0; i < res.length; i++) {
             let newEvent = {
+              id: res[i]?._id,
               title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name.S}`,
               startTime: res[i]?.StartTime,
               endTime: res[i]?.EndTime,
@@ -121,10 +128,10 @@ export class StudentGroupsManagerComponent implements OnInit {
               daysOfWeek: res[i]?.Day,
               extendedProps: {
                 roomNumber: res[i]?.RoomNo,
-                roomType: res[i]?.Room.Type.S
+                roomType: res[i]?.Room.Type.S,
+                staffId: res[i]?.StaffId
               }
             }
-            console.log(newEvent)
 
             calendarApi?.addEvent(newEvent);
           }
