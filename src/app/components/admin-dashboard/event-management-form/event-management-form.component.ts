@@ -9,6 +9,7 @@ import { DatabaseApiService } from '../../../services/database-api/database-api.
 import { Room } from '../../../interfaces/room';
 import { PaginatedRoomResponse } from '../../../interfaces/request-responses/paginated-room-response';
 import { EventApi } from '@fullcalendar/core';
+import { Staff } from '../../../interfaces/staff';
 
 @Component({
   selector: 'app-event-management-form',
@@ -23,7 +24,7 @@ import { EventApi } from '@fullcalendar/core';
 export class EventManagementFormComponent implements OnChanges {
   // Inputs and outputs
   @Input() studentGroup: StudentGroup | null = null;
-  @Input() staffMember: string | null = null;
+  @Input() staffMember: Staff | null = null;
   @Input() roomNumber: Room | null = null;
   @Input() event: EventApi | null = null;
 
@@ -100,9 +101,9 @@ export class EventManagementFormComponent implements OnChanges {
         Day: 'Select Day...',
         Semester: 'Winter',
         ModuleCode: '',
-        StudentGroup: this.studentGroup?.StudentGroup,
-        StaffId: "",
-        RoomNo: ''
+        StudentGroup: this.studentGroup?.StudentGroup || '',
+        StaffId: this.staffMember?.StaffId || '',
+        RoomNo: this.roomNumber?.RoomNo || ''
       });
     }
   }

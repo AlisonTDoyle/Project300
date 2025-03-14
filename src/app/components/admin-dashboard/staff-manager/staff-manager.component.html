@@ -6,14 +6,28 @@
                 <div class="col-4">
                     <!-- List of student groups -->
                     <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
-                        staff list
+                        @if (staffMembers.length > 0) {
+                        <div class="card mb-2 student-group-card" *ngFor="let staff of staffMembers"
+                            (click)="StudentGroupClicked(staff)"
+                            [ngClass]="{'selected': staff === selectedStaffMember}">
+                            <div class="card-body p-2">
+                                <p class="mb-0">{{staff.Name}}</p>
+                            </div>
+                        </div>
+                        <button (click)="FetchStaffMembers()" [disabled]="!loadMoreStaff">Load More...</button>
+                        }
+                        @else {
+                        <div class="card-body p-2">
+                            <p class="mb-0">No student groups</p>
+                        </div>
+                        }
                     </div>
                 </div>
                 <!-- Event management form -->
                 <div class="col-8">
                     <div class="card">
                         <div class="p-2">
-                            <app-event-management-form></app-event-management-form>
+                            <app-event-management-form [event]="selectedEvent" [staffMember]="selectedStaffMember" (eventCreated)="FetchTimetableForStaff(selectedStaffMember)"></app-event-management-form>
                         </div>
                     </div>
                 </div>
@@ -22,9 +36,10 @@
         <!-- Timetable column -->
         <div class="col-12 col-lg-6">
             @if (selectedStaffMember) {
-                <full-calendar></full-calendar>
+            <h2 class="fs-6">{{selectedStaffMember.StaffId}} Schedule</h2>
+                <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
             } @else {
-            <p class="mb-0">Select a staff member to view timetable</p>
+            <p class="mb-0">Select a student group to view timetable</p>
             }
         </div>
     </div>

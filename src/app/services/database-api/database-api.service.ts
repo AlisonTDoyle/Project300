@@ -4,6 +4,7 @@ import { Observable, tap } from 'rxjs';
 import { Room } from '../../interfaces/room';
 import { PaginatedRoomResponse } from '../../interfaces/request-responses/paginated-room-response';
 import { PaginatedStudentGroupsResponse } from '../../interfaces/request-responses/paginated-student-groups-response';
+import { PaginatedStaffResponse } from '../../interfaces/request-responses/paginated-staff-response';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class DatabaseApiService {
   private _apiUrl: string = "https://fsjvpth2m1.execute-api.eu-west-1.amazonaws.com/dev/database";
   private _roomApiUrl: string = `${this._apiUrl}/room`;
   private _studentGroupApiUrl: string = `${this._apiUrl}/student-group`;
+  private _staffApiUrl: string = `${this._apiUrl}/staff`;
 
   // Constructor
   constructor(private _http: HttpClient) { }
@@ -53,16 +55,16 @@ export class DatabaseApiService {
     );
   }
 
-  public ReadStaffWithPagination(pageSize: Number, cursor: Object): Observable<PaginatedStudentGroupsResponse> {
+  public ReadStaffWithPagination(pageSize: Number, cursor: Object): Observable<PaginatedStaffResponse> {
     // Variables
-    let studentGroupQueryUrl = this._studentGroupApiUrl + "/query";
+    let staffQueryUrl = this._staffApiUrl + "/query";
     let queryBody = {
       "pageSize": pageSize,
       "cursor": cursor
     }
 
     // Request
-    return this._http.post<PaginatedStudentGroupsResponse>(studentGroupQueryUrl, queryBody).pipe(
+    return this._http.post<PaginatedStaffResponse>(staffQueryUrl, queryBody).pipe(
       tap((res) => {
         console.log(res);
       })
