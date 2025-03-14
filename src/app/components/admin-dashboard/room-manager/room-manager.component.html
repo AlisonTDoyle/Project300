@@ -1,44 +1,47 @@
-<div class="container-fluid h-100">
-    <h1>Room Manager</h1>
-    <div class="row my-2">
-        <div class="col-2">
-            <div class="card">
-                <div class="container">
-                    <div class="input-group my-3">
-                        <input type="text" class="form-control" placeholder="Search for room"
-                            aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <button class="btn btn-primary" id="basic-addon2"><span class="bi bi-search"></span></button>
-                    </div>
-                    <div class="my-3">
-                        <select class="form-select">
-                            <option>Filter Rooms</option>
-                            <option>Lecture Hall</option>
-                            <option>Tiered Classroom</option>
-                            <option>Computer Lab</option>
-                            <option>Science Lab</option>
-                        </select>
-                    </div>
-                    <hr>
-                    <div>
-                        <div class="card mb-2 room-card" *ngFor="let room of rooms" (click)="FetchRoomTimetable(room)">
+<div class="container-fluid">
+    <div class="row my-4">
+        <!-- Details column -->
+        <div class="col-12 col-lg-6">
+            <div class="row h-100">
+                <div class="col-4">
+                    <!-- List of student groups -->
+                    <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
+                        @if (rooms.length > 0) {
+                        <div class="card mb-2 student-group-card" *ngFor="let room of rooms"
+                            (click)="RoomClicked(room)"
+                            [ngClass]="{'selected': room === selectedRoom}">
                             <div class="card-body p-2">
                                 <p class="mb-0">{{room.RoomNo}}</p>
-                                <i class="text-secondary">{{room.Type}} ({{room.Seats}})</i>
+                                <p class="mb-0">{{room.Type}}</p>
                             </div>
                         </div>
+                        <button (click)="FetchRooms()" [disabled]="!loadMoreRooms">Load More...</button>
+                        }
+                        @else {
+                        <div class="card-body p-2">
+                            <p class="mb-0">No student groups</p>
+                        </div>
+                        }
                     </div>
-                    <button class="btn btn-primary my-3">Create Room</button>
+                </div>
+                <!-- Event management form -->
+                <div class="col-8">
+                    <div class="card">
+                        <div class="p-2">
+                            <app-event-management-form [event]="selectedEvent" [roomNumber]="selectedRoom" (eventCreated)="FetchTimetableForRoom(selectedRoom)"></app-event-management-form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-8">
-            <div class="card p-2">
-                <div class="container">
-                    <full-calendar #programPreview  [options]="calendarOptions"></full-calendar>
-                </div>
-            </div>
-        </div>
-        <div class="col-2">
+        <!-- Timetable column -->
+        <div class="col-12 col-lg-6">
+            @if (selectedRoom) {
+            <h2 class="fs-6">{{selectedRoom}} Schedule</h2>
+                <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
+            } @else {
+            <p class="mb-0">Select a room to view timetable</p>
+            }
         </div>
     </div>
 </div>

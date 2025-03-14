@@ -34,7 +34,6 @@ export class DatabaseApiService {
     // Request
     return this._http.post<PaginatedRoomResponse>(roomQueryUrl, queryBody).pipe(
       tap((res) => {
-        console.log(res);
       })
     );
   }
@@ -50,7 +49,6 @@ export class DatabaseApiService {
     // Request
     return this._http.post<PaginatedStudentGroupsResponse>(studentGroupQueryUrl, queryBody).pipe(
       tap((res) => {
-        console.log(res);
       })
     );
   }
@@ -66,7 +64,6 @@ export class DatabaseApiService {
     // Request
     return this._http.post<PaginatedStaffResponse>(staffQueryUrl, queryBody).pipe(
       tap((res) => {
-        console.log(res);
       })
     );
   }
