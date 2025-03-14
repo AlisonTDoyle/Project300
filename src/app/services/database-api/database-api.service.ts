@@ -53,6 +53,22 @@ export class DatabaseApiService {
     );
   }
 
+  public ReadStaffWithPagination(pageSize: Number, cursor: Object): Observable<PaginatedStudentGroupsResponse> {
+    // Variables
+    let studentGroupQueryUrl = this._studentGroupApiUrl + "/query";
+    let queryBody = {
+      "pageSize": pageSize,
+      "cursor": cursor
+    }
+
+    // Request
+    return this._http.post<PaginatedStudentGroupsResponse>(studentGroupQueryUrl, queryBody).pipe(
+      tap((res) => {
+        console.log(res);
+      })
+    );
+  }
+
   // Update
 
   // Delete

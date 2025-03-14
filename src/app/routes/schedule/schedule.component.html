@@ -206,20 +206,71 @@
      
     <!-- Greeting the User -->
     <!----------------------->
-    <div class="greeting" style="text-align: center;"> <h3>Hello Jake!</h3> </div>
+    <div class="greeting" style="text-align: center;"> <h3>Hello!</h3> </div>
     
-    <br/><br/>
+    <!-- Sidebar to select timetable-->
+    <!------>
+    <div class="container-fluid h-100 timetable-container">
+        <div class="row my-32">
+            <div class="col-12">
+                <div class="card-body">
+                    <div class="container">
+                        <div class="input-group my-3">
+                            <input type="text" class="form-control" placeholder="Search Student Group" 
+                                aria-label="Recipient's username" aria-describedby="basic-addon2" searchEnabled="true" #filter>
+                            <button class="btn btn-primary" id="basic-addon2" type="button" (click)="onSearch(filter.value)"><span class="bi bi-search"></span></button>
+                        </div>
+                        <p class="card-body greeting p-2" style="text-align: center;">Please Select a Student Group</p>
+                        <hr>
+                        <div style="max-height: 80vh; overflow-y: auto;">
+                            @if (studentGroups.length > 0) {
+                                <div class="card mb-2 student-group-card" *ngFor="let group of studentGroups"
+                                    (click)="StudentGroupClicked(group)"
+                                    [ngClass]="{'selected': group === selectedStudentGroup}">
+                                    <div class="card-body p-2">
+                                        <p class="mb-0">{{group.StudentGroup}}</p>
+                                    </div>
+                                </div>
+                                }
+                                @else {
+                                <div class="card-body p-2">
+                                    <p class="mb-0">No student groups</p>
+                                </div>
+                                }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-16">
+                <div class="card-body p-2" style="max-height: 90vh; overflow-y: auto;">
+                        <full-calendar class="h-100" style="max-height: 60vh;" #programPreview [options]="calendarOptions" [events]="schedule"></full-calendar>
+                </div>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+    </div>
 
     <!-- Calling the Timetable -->
     <!--------------------------->
-    <full-calendar class="h-100" style="max-height: 60vh;" [options]="calendarOptions" [events]="schedule"></full-calendar>
+
+    <!-- <div class="col-8">
+        <div class="card p-2">
+            <div class="container">
+                <full-calendar class="h-100" style="max-height: 60vh;" #programPreview  [options]="calendarOptions"></full-calendar>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+    </div> -->
+    <!-- <full-calendar class="h-100" style="max-height: 60vh;" #programPreview [options]="calendarOptions" [events]="schedule"></full-calendar> -->
 
     <!-- File Select -->
     <!----------------->
-    <div style="text-align: right; margin: 20px;">
+    <!-- <div style="text-align: right; margin: 20px;">
         <label for="fileInput" class="btn btn-primary">Import Schedule</label>
         <input id="fileInput" type="file" accept=".json" style="display: none;" (change)="importSchedule($event)">
-    </div>
+    </div> -->
 
     <!-- Display the Upcoming Subject -->
     <!---------------------------------->
