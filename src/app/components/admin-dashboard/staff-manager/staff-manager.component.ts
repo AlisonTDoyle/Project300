@@ -23,9 +23,15 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 })
 export class StaffManagerComponent implements OnInit {
   // properties
-  protected selectedStaffMember: Staff | null = null;
-  protected staffMembers: Staff[] = []
-  protected loadMoreStaff: boolean = true;
+  private _staffMembersCursor: object = {};
+
+  protected selectedStaffMember: Staff | null = {
+    StaffId: '',
+    Department: '',
+    Name: ''
+  };
+  protected event: object = {};
+  protected staffMembers: Staff[] = [];
   protected calendarOptions: CalendarOptions = {
     initialView: 'timeGridWeek',
     plugins: [
@@ -57,87 +63,84 @@ export class StaffManagerComponent implements OnInit {
     },
     eventClick: this.handleEventClick.bind(this),
   };
-  protected event: object = {};
-  protected selectedEvent: EventApi | null = null;
   protected loadingTimetable: boolean = false;
-
-  private _staffCursor: object = {};
+  protected loadMoreStaff:boolean =true;
+  protected selectedEvent:EventApi | null = null;
 
   @ViewChild('programPreview') calendarComponent: FullCalendarComponent | null = null;
 
   // Constructor
   constructor(private _databaseApi: DatabaseApiService, private _timetableApi: TimetableApiService) {
   }
-
-  // Event handlers
-  ngOnInit(): void {
-    this.FetchStaffMembers();
-  }
-
-  protected handleEventClick(clickInfo: EventClickArg) {
-    this.selectedEvent = clickInfo.event;
-  }
-
-  protected StudentGroupClicked(staff: Staff): void {
-    // Set selected student group
-    this.selectedStaffMember = staff;
-
-    // Fetch timetable for student group
-    this.loadingTimetable = true;
-    this.FetchTimetableForStaff(staff);
-  }
-
-  // Methods
-  protected FetchStaffMembers() {
-    this._databaseApi.ReadStaffWithPagination(20, this._staffCursor).subscribe((res) => {
-      res?.staff.map((group) => {
-        this.staffMembers.push(group)
-      });
-
-      // check if there is more to load
-      if (this._staffCursor == res.cursor || res.staff.length < 20) {
-        this.loadMoreStaff = false
-      }
-
-      this._staffCursor = res.cursor;
-    });
-  }
   
-  protected FetchTimetableForStaff(staff: Staff | null): void {
-    if (staff != null) {
-      // Get the calendar API
-      let calendarApi = this.calendarComponent?.getApi();
-      console.log(calendarApi)
-
-      // Fetch the timetable for the selected student group
-      if (calendarApi != null) {
-        // Clear the current events
-        calendarApi.removeAllEvents();
-
-        // Fetch the timetable for the selected student group
-        this._timetableApi.ReadStaffTimetable(staff.StaffId).subscribe((res: any) => {
-
-          for (let i = 0; i < res.length; i++) {
-            let newEvent = {
-              id: res[i]?._id,
-              title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name.S}`,
-              startTime: res[i]?.StartTime,
-              endTime: res[i]?.EndTime,
-              startRecur: "2024-11-11T11:00:00.000Z",
-              daysOfWeek: res[i]?.Day,
-              extendedProps: {
-                roomNumber: res[i]?.RoomNo,
-                roomType: res[i]?.Room.Type.S,
-                staffId: res[i]?.StaffId
-              }
-            }
-
-            calendarApi?.addEvent(newEvent);
-          }
-
-          this.loadingTimetable = false;
+    // Event handlers
+    ngOnInit(): void {
+      this.FetchStaffMembers();
+    }
+  
+    protected StaffMemberClicked(staffMember: Staff): void {
+      // Set selected staff member
+      this.selectedStaffMember = staffMember;
+  
+      // Fetch timetable for staff member
+      this.loadingTimetable = true;
+      this.FetchTimetableForStaffMember(staffMember);
+    }
+  
+    protected handleEventClick(clickInfo:EventClickArg) {
+      this.selectedEvent = clickInfo.event;
+    }
+  
+    // Methods
+    protected FetchStaffMembers(): void {
+      this._databaseApi.ReadStaffWithPagination(20, this._staffMembersCursor).subscribe((res) => {
+        res.staff.map((member) => {
+          this.staffMembers.push(member)
         });
+  
+        // check if there is more to load
+        if (this._staffMembersCursor == res.cursor || res.staff.length < 20) {
+          this.loadMoreStaff = false
+        }
+  
+        this._staffMembersCursor = res.cursor;
+      });
+    }
+  
+    protected FetchTimetableForStaffMember(staffMember: Staff | null): void {
+      if (staffMember != null) {
+        // Get the calendar API
+        let calendarApi = this.calendarComponent?.getApi();
+  
+        // Fetch the timetable for the selected staff member
+        if (calendarApi != null) {
+          // Clear the current events
+          calendarApi.removeAllEvents();
+  
+          // Fetch the timetable for the selected staff member
+          this._timetableApi.ReadStaffTimetable(staffMember.StaffId).subscribe((res: any) => {
+  
+            for (let i = 0; i < res.length; i++) {
+              let newEvent = {
+                id: res[i]?._id,
+                title: `${res[i]?.ModuleCode} - ${res[i]?.Module.Name.S}`,
+                startTime: res[i]?.StartTime,
+                endTime: res[i]?.EndTime,
+                startRecur: "2024-11-11T11:00:00.000Z",
+                daysOfWeek: res[i]?.Day,
+                extendedProps: {
+                  roomNumber: res[i]?.RoomNo,
+                  roomType: res[i]?.Room.Type.S,
+                  staffId: res[i]?.StaffId
+                }
+              }
+  
+              calendarApi?.addEvent(newEvent);
+            }
+  
+            this.loadingTimetable = false;
+          });
+        }
       }
     }
-  }
 }
