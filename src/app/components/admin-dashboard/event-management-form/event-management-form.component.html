@@ -1,0 +1,85 @@
+<div class="container">
+    <form [formGroup]="eventForm">
+        <div class="mb-2">
+            <label class="form-label">Start Time</label>
+            <input type="time" class="form-control" formControlName="StartTime" required>
+            <div *ngIf="startTime?.touched && startTime?.hasError('required')">
+                <div class="text-danger">Start time not entered</div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">End Time</label>
+            <input type="time" class="form-control" formControlName="EndTime" required>
+            <div *ngIf="endTime?.touched && endTime?.hasError('required')">
+                <div class="text-danger">End time not entered</div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Day</label>
+            <select class="form-select" formControlName="Day" required>
+                <option>Select Day...</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+            </select>
+            <div *ngIf="day?.touched && day?.hasError('required')">
+                <div class="text-danger">Day not selected</div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Semester</label>
+            <select class="form-select" formControlName="Semester" required>
+                <option>Winter</option>
+                <option>Summer</option>
+            </select>
+            <div *ngIf="semester?.touched && semester?.hasError('required')">
+                <div class="text-danger">Semester not selected</div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Module Code</label>
+            <input type="text" class="form-control" formControlName="ModuleCode" required>
+            <div *ngIf="moduleCode?.touched && moduleCode?.hasError('required')">
+                <div class="text-danger">Module not entered</div>
+            </div>
+        </div>
+        <div class="mb-2" [ngClass]="{'d-none': !showStudentGroupField}">
+            <label class="form-label">Student Group</label>
+            <input type="text" class="form-control" formControlName="StudentGroup" list="studentGroups" required>
+            <datalist id="studentGroups">
+                <option *ngFor="let group of studentGroups" value="{{group.StudentGroup}}">{{group.StudentGroup}}
+                </option>
+            </datalist>
+            <div *ngIf="studentGroupField?.touched || studentGroupField?.hasError('required')">
+                <p class="text-danger">Student group not entered</p>
+            </div>
+        </div>
+        <div class="mb-2" [ngClass]="{'d-none': !showStaffIdField}">
+            <label class="form-label">Staff Member</label>
+            <input type="text" class="form-control" formControlName="StaffId" required>
+            <div *ngIf="staffId?.touched && staffId?.hasError('required')">
+                <div class="text-danger">Staff member not entered</div>
+            </div>
+        </div>
+        <div class="mb-2" [ngClass]="{'d-none': !showRoomNoField}">
+            <label class="form-label">Room Number</label>
+            <input type="text" class="form-control" list="rooms" formControlName="RoomNo" required>
+            <datalist id="rooms">
+                <option *ngFor="let room of rooms" [value]="room.RoomNo">{{room.RoomNo}}</option>
+            </datalist>
+            <div *ngIf="roomNo?.touched && roomNo?.hasError('required')">
+                <div class="text-danger">Room number not entered</div>
+            </div>
+        </div>
+        <p class="text-danger">
+            <span *ngFor="let conflict of eventConflicts">
+                {{ conflict }}<br>
+            </span>
+        </p>
+        <button class="btn btn-secondary w-100 mb-2" type="button" (click)="ClearForm()" [ngClass]="{'d-none': event == null}">Clear Form</button>
+        <button class="btn btn-primary w-100 mb-2" (click)="onSubmit('update')" [ngClass]="{'d-none': event == null}">Update Event</button>
+        <button class="btn btn-primary w-100 mb-2" (click)="onSubmit('create')" [ngClass]="{'d-none': event != null}">Create Event</button>
+    </form>
+</div>

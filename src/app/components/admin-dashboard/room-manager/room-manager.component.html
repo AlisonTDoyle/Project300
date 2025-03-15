@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <div class="row my-4">
+        <!-- Details column -->
+        <div class="col-12 col-lg-6">
+            <div class="row h-100">
+                <div class="col-4">
+                    <!-- List of student groups -->
+                    <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
+                        @if (rooms.length > 0) {
+                        <div class="card mb-2 student-group-card" *ngFor="let room of rooms"
+                            (click)="RoomClicked(room)"
+                            [ngClass]="{'selected': room === selectedRoom}">
+                            <div class="card-body p-2">
+                                <p class="mb-0">{{room.RoomNo}}</p>
+                                <p class="mb-0">{{room.Type}}</p>
+                            </div>
+                        </div>
+                        <button (click)="FetchRooms()" [disabled]="!loadMoreRooms">Load More...</button>
+                        }
+                        @else {
+                        <div class="card-body p-2">
+                            <p class="mb-0">No student groups</p>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <!-- Event management form -->
+                <div class="col-8">
+                    <div class="card">
+                        <div class="p-2">
+                            <app-event-management-form [event]="selectedEvent" [roomNumber]="selectedRoom" (eventCreated)="FetchTimetableForRoom(selectedRoom)"></app-event-management-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Timetable column -->
+        <div class="col-12 col-lg-6">
+            @if (selectedRoom) {
+            <h2 class="fs-6">{{selectedRoom}} Schedule</h2>
+                <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
+            } @else {
+            <p class="mb-0">Select a room to view timetable</p>
+            }
+        </div>
+    </div>
+</div>

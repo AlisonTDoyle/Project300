@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <div class="row my-4">
+        <!-- Details column -->
+        <div class="col-12 col-lg-6">
+            <div class="row h-100">
+                <div class="col-4">
+                    <!-- List of student groups -->
+                    <div class="card p-2" style="max-height: 80vh; overflow-y: auto;">
+                        @if (staffMembers.length > 0) {
+                        <div class="card mb-2 student-group-card" *ngFor="let staff of staffMembers"
+                            (click)="StaffMemberClicked(staff)"
+                            [ngClass]="{'selected': staff === selectedStaffMember}">
+                            <div class="card-body p-2">
+                                <p class="mb-0">{{staff.StaffId}}</p>
+                                <p class="mb-0">{{staff.Name}}</p>
+                            </div>
+                        </div>
+                        <button (click)="FetchStaffMembers()" [disabled]="!loadMoreStaff">Load More...</button>
+                        }
+                        @else {
+                        <div class="card-body p-2">
+                            <p class="mb-0">No student groups</p>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <!-- Event management form -->
+                <div class="col-8">
+                    <div class="card">
+                        <div class="p-2">
+                            <app-event-management-form [event]="selectedEvent" [staffMember]="selectedStaffMember" (eventCreated)="FetchTimetableForStaffMember(selectedStaffMember)"></app-event-management-form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Timetable column -->
+        <div class="col-12 col-lg-6">
+            @if (selectedStaffMember) {
+            <h2 class="fs-6">{{selectedStaffMember.StaffId}} Schedule</h2>
+                <full-calendar [options]="calendarOptions" id="programPreview" #programPreview></full-calendar>
+            } @else {
+            <p class="mb-0">Select a student group to view timetable</p>
+            }
+        </div>
+    </div>
+</div>
